@@ -136,7 +136,8 @@ export class HealthPlan extends Entity {
   }
 
   get coversMaternity(): boolean {
-    return /obst[eé]tric/i.test(this.coverageType)
+    // "Obstetrícia" carries its accent on the i, and "obstetra"/"parto" also appear.
+    return /obstetr|parto|matern/i.test(this.coverageType)
   }
 
   get hasPrivateRoom(): boolean {
