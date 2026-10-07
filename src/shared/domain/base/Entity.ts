@@ -11,13 +11,17 @@ export abstract class Entity {
   createdAt: Date
   updatedAt: Date
 
-  constructor(id: string) {
+  /**
+   * `createdAt` and `updatedAt` are optional so an entity rehydrated from the
+   * database keeps its stored timestamps instead of being stamped as new.
+   */
+  constructor(id: string, createdAt?: Date, updatedAt?: Date) {
     if (!id) {
       throw new DomainException('Entity must have an ID')
     }
     this.id = id
-    this.createdAt = new Date()
-    this.updatedAt = new Date()
+    this.createdAt = createdAt ?? new Date()
+    this.updatedAt = updatedAt ?? this.createdAt
   }
 
   equals(other: unknown): boolean {

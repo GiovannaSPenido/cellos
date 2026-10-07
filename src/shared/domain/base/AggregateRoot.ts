@@ -11,7 +11,12 @@ export interface AggregateRootPrimitive extends EntityPrimitive {
 
 export abstract class AggregateRoot extends Entity {
   private domainEvents: DomainEvent[] = []
-  version = 0
+  version: number
+
+  constructor(id: string, createdAt?: Date, updatedAt?: Date, version = 0) {
+    super(id, createdAt, updatedAt)
+    this.version = version
+  }
 
   /** Invariants that must hold for the aggregate to be valid. */
   abstract validate(): void
