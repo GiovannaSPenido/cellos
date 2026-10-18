@@ -3,6 +3,7 @@ import InteractionRepository from '../../domain/repositories/InteractionReposito
 import LeadRepository from '../../domain/repositories/LeadRepository'
 import { InteractionTypeValue } from '../../domain/value-objects/InteractionType'
 import DomainException from '@/shared/domain/exceptions/DomainException'
+import NotFoundException from '@/shared/domain/exceptions/NotFoundException'
 
 export interface RegisterInteractionDTO {
   leadId: string
@@ -25,7 +26,7 @@ export class RegisterInteractionUseCase {
     // RNG02 — an interaction only exists against a lead already on file.
     const lead = await this.leadRepository.findById(dto.leadId)
     if (!lead) {
-      throw new DomainException(`Lead ${dto.leadId} was not found`)
+      throw new NotFoundException('Lead', dto.leadId)
     }
 
     const interaction = Interaction.create({

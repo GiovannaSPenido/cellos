@@ -62,10 +62,13 @@ export async function getContainer(): Promise<Container> {
 }
 
 /**
- * For the public website only. A visitor has no session, so this bypasses row
- * level security — use it solely for reading the plan catalogue and accepting
- * a lead from the contact form (RF06, RNG08).
+ * Bypasses row level security entirely. The only legitimate use is accepting a
+ * lead from the public contact form (RF06, RNG08), where there is no session to
+ * own the insert and `leads` grants anon no policy.
+ *
+ * Reading the plan catalogue does NOT need this: `planos_select_publico` lets
+ * anon select, so `getContainer()` serves a visitor fine.
  */
-export function getPublicContainer(): Container {
+export function getServiceRoleContainer(): Container {
   return buildContainer(createServiceRoleClient())
 }

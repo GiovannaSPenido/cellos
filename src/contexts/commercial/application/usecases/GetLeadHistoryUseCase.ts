@@ -3,6 +3,7 @@ import { InteractionPrimitive } from '../../domain/entities/Interaction'
 import LeadRepository from '../../domain/repositories/LeadRepository'
 import InteractionRepository from '../../domain/repositories/InteractionRepository'
 import DomainException from '@/shared/domain/exceptions/DomainException'
+import NotFoundException from '@/shared/domain/exceptions/NotFoundException'
 
 export interface LeadHistory {
   lead: LeadPrimitive
@@ -19,7 +20,7 @@ export class GetLeadHistoryUseCase {
   async execute(leadId: string): Promise<LeadHistory> {
     const lead = await this.leadRepository.findById(leadId)
     if (!lead) {
-      throw new DomainException(`Lead ${leadId} was not found`)
+      throw new NotFoundException('Lead', leadId)
     }
 
     const interactions = await this.interactionRepository.findByLeadId(leadId)

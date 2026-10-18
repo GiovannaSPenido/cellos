@@ -3,6 +3,7 @@ import ClientRepository from '../../domain/repositories/ClientRepository'
 import HealthPlanRepository from '../../domain/repositories/HealthPlanRepository'
 import LeadRepository from '../../domain/repositories/LeadRepository'
 import DomainException from '@/shared/domain/exceptions/DomainException'
+import NotFoundException from '@/shared/domain/exceptions/NotFoundException'
 
 export interface ConvertLeadDTO {
   leadId: string
@@ -35,12 +36,12 @@ export class ConvertLeadToClientUseCase {
   async execute(dto: ConvertLeadDTO): Promise<ClientPrimitive> {
     const lead = await this.leadRepository.findById(dto.leadId)
     if (!lead) {
-      throw new DomainException(`Lead ${dto.leadId} was not found`)
+      throw new NotFoundException('Lead', dto.leadId)
     }
 
     const plan = await this.healthPlanRepository.findById(dto.planId)
     if (!plan) {
-      throw new DomainException(`Health plan ${dto.planId} was not found`)
+      throw new NotFoundException('Health plan', dto.planId)
     }
 
     const existing = await this.clientRepository.findByLeadId(dto.leadId)

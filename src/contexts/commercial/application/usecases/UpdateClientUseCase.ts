@@ -3,6 +3,7 @@ import ClientRepository from '../../domain/repositories/ClientRepository'
 import HealthPlanRepository from '../../domain/repositories/HealthPlanRepository'
 import { ClientStatusValue } from '../../domain/value-objects/ClientStatus'
 import DomainException from '@/shared/domain/exceptions/DomainException'
+import NotFoundException from '@/shared/domain/exceptions/NotFoundException'
 
 export interface UpdateClientDTO {
   /** Changing the plan requires the new monthly fee alongside it. */
@@ -26,13 +27,13 @@ export class UpdateClientUseCase {
   async execute(id: string, dto: UpdateClientDTO): Promise<ClientPrimitive> {
     const client = await this.clientRepository.findById(id)
     if (!client) {
-      throw new DomainException(`Client ${id} was not found`)
+      throw new NotFoundException('Client', id)
     }
 
     if (dto.planId && dto.planId !== client.planId) {
       const plan = await this.healthPlanRepository.findById(dto.planId)
       if (!plan) {
-        throw new DomainException(`Health plan ${dto.planId} was not found`)
+        throw new NotFoundException('Health plan', dto.planId)
       }
       if (dto.monthlyFee === undefined) {
         throw new DomainException('Changing the plan requires the new monthly fee')

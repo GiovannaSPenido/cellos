@@ -2,6 +2,7 @@ import { LeadPrimitive } from '../../domain/entities/Lead'
 import LeadRepository from '../../domain/repositories/LeadRepository'
 import { LeadStatusValue } from '../../domain/value-objects/LeadStatus'
 import DomainException from '@/shared/domain/exceptions/DomainException'
+import NotFoundException from '@/shared/domain/exceptions/NotFoundException'
 
 /**
  * RF05 — move a lead between funnel stages, which is what dragging a card
@@ -13,7 +14,7 @@ export class ChangeLeadStatusUseCase {
   async execute(id: string, status: LeadStatusValue): Promise<LeadPrimitive> {
     const lead = await this.leadRepository.findById(id)
     if (!lead) {
-      throw new DomainException(`Lead ${id} was not found`)
+      throw new NotFoundException('Lead', id)
     }
 
     // Reaching CONVERTED happens through the conversion use case, which also
