@@ -1,7 +1,7 @@
 import LeadRepository, { LeadFilter } from '../../domain/repositories/LeadRepository'
 import Lead from '../../domain/entities/Lead'
 import Money from '@/shared/domain/value-objects/Money'
-import { getSupabaseClient } from '@/lib/supabase'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { formatDateOnly, parseDateOnly, parseTimestamp } from '@/lib/dates'
 
 /**
@@ -34,8 +34,15 @@ export interface LeadRow {
 const NO_ROWS = 'PGRST116'
 
 export class SupabaseLeadRepository implements LeadRepository {
+  /**
+   * Takes the request's authenticated client: row level security scopes every
+   * query to the signed-in salesperson, so an anonymous client would read back
+   * nothing at all.
+   */
+  constructor(private readonly supabase: SupabaseClient) {}
+
   private table() {
-    return getSupabaseClient().from('leads')
+    return this.supabase.from('leads')
   }
 
   async save(lead: Lead): Promise<Lead> {

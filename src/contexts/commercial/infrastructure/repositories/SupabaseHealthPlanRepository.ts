@@ -1,7 +1,7 @@
 import HealthPlanRepository from '../../domain/repositories/HealthPlanRepository'
 import HealthPlan from '../../domain/entities/HealthPlan'
 import Money from '@/shared/domain/value-objects/Money'
-import { getSupabaseClient } from '@/lib/supabase'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { parseTimestamp } from '@/lib/dates'
 
 export interface HealthPlanRow {
@@ -29,8 +29,10 @@ export interface HealthPlanRow {
 const NO_ROWS = 'PGRST116'
 
 export class SupabaseHealthPlanRepository implements HealthPlanRepository {
+  constructor(private readonly supabase: SupabaseClient) {}
+
   private table() {
-    return getSupabaseClient().from('planos_saude')
+    return this.supabase.from('planos_saude')
   }
 
   async findById(id: string): Promise<HealthPlan | null> {

@@ -1,26 +1,98 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================================
+   Cellos — identidade visual
+   Terracota (ação e destaque) + marrom profundo + neutros quentes.
+
+   Os nomes são semânticos de propósito: o protótipo chamava de "teal" um token
+   que já era marrom, e os botões ainda carregavam o teal antigo cravado no CSS.
+   ========================================================================== */
+
+@theme {
+  /* tipografia — as variáveis vêm do next/font no layout */
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  /* marca */
+  --color-brand-50: #faeae2;
+  --color-brand-100: #f5dfce;
+  --color-brand: #e8937d;
+  --color-brand-600: #d97a64;
+  --color-brand-700: #c85d4b;
+
+  /* complementar */
+  --color-deep-50: #ebe5e7;
+  --color-deep-100: #d9bfc3;
+  --color-deep: #4a2428;
+  --color-deep-600: #3d1d21;
+  --color-deep-700: #30161b;
+
+  /* neutros quentes */
+  --color-ink: #211e1a;
+  --color-ink-2: #46403a;
+  --color-muted: #867d73;
+  --color-muted-2: #a89f94;
+  --color-line: #ece7df;
+  --color-line-2: #dfd8cd;
+  --color-canvas: #faf8f4;
+  --color-surface: #ffffff;
+  --color-surface-2: #f5f1ea;
+
+  /* estado */
+  --color-positive: #3f9a5e;
+  --color-positive-50: #eaf5ee;
+  --color-caution: #d89a2a;
+  --color-caution-50: #fbf2dd;
+  --color-critical: #cb5042;
+  --color-critical-50: #fbeae7;
+
+  /* raios */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+
+  /* sombras */
+  --shadow-sm: 0 1px 2px rgba(33, 30, 26, 0.05), 0 1px 3px rgba(33, 30, 26, 0.04);
+  --shadow-md: 0 4px 12px rgba(33, 30, 26, 0.06), 0 2px 4px rgba(33, 30, 26, 0.04);
+  --shadow-lg: 0 18px 40px -12px rgba(33, 30, 26, 0.18), 0 6px 14px rgba(33, 30, 26, 0.06);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+::selection {
+  background: var(--color-brand-100);
+}
+
+/* números que se alinham em colunas */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

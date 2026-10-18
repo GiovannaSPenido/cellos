@@ -1,6 +1,6 @@
 import InteractionRepository from '../../domain/repositories/InteractionRepository'
 import Interaction from '../../domain/entities/Interaction'
-import { getSupabaseClient } from '@/lib/supabase'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { parseTimestamp } from '@/lib/dates'
 
 export interface InteractionRow {
@@ -16,8 +16,10 @@ export interface InteractionRow {
 const NO_ROWS = 'PGRST116'
 
 export class SupabaseInteractionRepository implements InteractionRepository {
+  constructor(private readonly supabase: SupabaseClient) {}
+
   private table() {
-    return getSupabaseClient().from('interacoes')
+    return this.supabase.from('interacoes')
   }
 
   async save(interaction: Interaction): Promise<Interaction> {

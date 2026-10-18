@@ -1,6 +1,6 @@
 import UserRepository from '../../domain/repositories/UserRepository'
 import User from '../../domain/entities/User'
-import { getSupabaseClient } from '@/lib/supabase'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { parseTimestamp } from '@/lib/dates'
 
 export interface UserRow {
@@ -16,8 +16,10 @@ export interface UserRow {
 const NO_ROWS = 'PGRST116'
 
 export class SupabaseUserRepository implements UserRepository {
+  constructor(private readonly supabase: SupabaseClient) {}
+
   private table() {
-    return getSupabaseClient().from('usuarios')
+    return this.supabase.from('usuarios')
   }
 
   async findById(id: string): Promise<User | null> {

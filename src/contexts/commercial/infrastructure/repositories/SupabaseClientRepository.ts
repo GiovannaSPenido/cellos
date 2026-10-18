@@ -1,7 +1,7 @@
 import ClientRepository, { ClientFilter } from '../../domain/repositories/ClientRepository'
 import Client from '../../domain/entities/Client'
 import Money from '@/shared/domain/value-objects/Money'
-import { getSupabaseClient } from '@/lib/supabase'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { formatDateOnly, parseDateOnly, parseTimestamp } from '@/lib/dates'
 
 export interface ClientRow {
@@ -24,8 +24,10 @@ export interface ClientRow {
 const NO_ROWS = 'PGRST116'
 
 export class SupabaseClientRepository implements ClientRepository {
+  constructor(private readonly supabase: SupabaseClient) {}
+
   private table() {
-    return getSupabaseClient().from('clientes')
+    return this.supabase.from('clientes')
   }
 
   async save(client: Client): Promise<Client> {
