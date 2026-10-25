@@ -83,7 +83,7 @@ export default function PriceSimulator({
           <select
             value={ageBracket}
             onChange={(e) => setAgeBracket(e.target.value as AgeBracketCode)}
-            className="w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-brand-700 focus:ring-[3px] focus:ring-brand-50"
+            className="w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50"
           >
             {ageBrackets.map((bracket) => (
               <option key={bracket.code} value={bracket.code}>
@@ -113,7 +113,7 @@ export default function PriceSimulator({
           </label>
         )}
 
-        <p className="flex gap-2.5 rounded-md bg-deep-50 p-4 text-[12.5px] leading-relaxed text-deep">
+        <p className="flex gap-2.5 rounded-md bg-teal-50 p-4 text-[12.5px] leading-relaxed text-teal-600">
           <Info size={18} aria-hidden className="mt-px shrink-0" />
           Empresas têm condições especiais por volume de vidas. Fale com a Cellos para uma
           proposta sob medida.
@@ -169,7 +169,7 @@ export default function PriceSimulator({
               href={`/contato?plano=${encodeURIComponent(plan.name)}`}
               className={`rounded-sm px-4 py-2.5 text-[13.5px] font-semibold transition ${
                 plan.featured
-                  ? 'bg-brand-700 text-white hover:bg-deep'
+                  ? 'bg-teal text-white hover:bg-teal-600'
                   : 'border border-line-2 text-ink-2 hover:bg-surface-2'
               }`}
             >

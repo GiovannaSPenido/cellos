@@ -65,7 +65,7 @@ export default function ClientsTable({ clients }: { clients: ClientListItem[] })
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar cliente…"
             aria-label="Buscar cliente"
-            className="w-full rounded-sm border border-line-2 bg-surface py-2.5 pl-10 pr-3 text-[14px] outline-none transition focus:border-brand-700 focus:ring-[3px] focus:ring-brand-50"
+            className="w-full rounded-sm border border-line-2 bg-surface py-2.5 pl-10 pr-3 text-[14px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50"
           />
         </div>
       </div>
@@ -118,7 +118,7 @@ export default function ClientsTable({ clients }: { clients: ClientListItem[] })
                         </Link>
                       </td>
                       <td className="px-4 py-3">
-                        <Badge tone={client.personType === 'PJ' ? 'deep' : 'neutral'}>
+                        <Badge tone={client.personType === 'PJ' ? 'teal' : 'neutral'}>
                           {client.personType}
                         </Badge>
                       </td>

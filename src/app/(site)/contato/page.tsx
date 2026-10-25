@@ -36,7 +36,7 @@ export default function ContatoPage() {
                 key={label}
                 className="flex items-center gap-4 rounded-lg border border-line bg-surface p-5"
               >
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-deep-50 text-deep">
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-teal-50 text-teal-600">
                   <Icon size={22} aria-hidden />
                 </span>
                 <span className="min-w-0">

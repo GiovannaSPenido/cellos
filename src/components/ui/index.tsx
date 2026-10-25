@@ -20,12 +20,12 @@ export function Card({
 
 /* ----------------------------------------------------------------- Badge -- */
 
-export type BadgeTone = 'neutral' | 'brand' | 'deep' | 'positive' | 'caution' | 'critical'
+export type BadgeTone = 'neutral' | 'brand' | 'teal' | 'positive' | 'caution' | 'critical'
 
 const BADGE_TONES: Record<BadgeTone, string> = {
   neutral: 'bg-surface-2 text-muted',
   brand: 'bg-brand-50 text-brand-700',
-  deep: 'bg-deep-50 text-deep',
+  teal: 'bg-teal-50 text-teal-600',
   positive: 'bg-positive-50 text-positive',
   caution: 'bg-caution-50 text-[#8a6410]',
   critical: 'bg-critical-50 text-critical',
@@ -60,18 +60,18 @@ export function Avatar({
 }: {
   name: string
   size?: number
-  tone?: 'brand' | 'deep'
+  tone?: 'brand' | 'teal'
 }) {
   const parts = name.replace(/[^\wÀ-ÿ ]/g, '').trim().split(/\s+/)
   const initials = ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || '?'
-  const resolved = tone ?? ((name.charCodeAt(0) || 0) % 2 === 0 ? 'brand' : 'deep')
+  const resolved = tone ?? ((name.charCodeAt(0) || 0) % 2 === 0 ? 'brand' : 'teal')
 
   return (
     <span
       aria-hidden
       style={{ width: size, height: size, fontSize: size * 0.38 }}
       className={`inline-flex shrink-0 items-center justify-center rounded-full font-bold tracking-tight ${
-        resolved === 'brand' ? 'bg-brand-50 text-brand-700' : 'bg-deep-50 text-deep'
+        resolved === 'brand' ? 'bg-brand-50 text-brand-700' : 'bg-teal-50 text-teal-600'
       }`}
     >
       {initials}
@@ -86,13 +86,13 @@ export function Stat({
   value,
   sub,
   icon,
-  tone = 'deep',
+  tone = 'teal',
 }: {
   label: string
   value: string | number
   sub?: string
   icon?: ReactNode
-  tone?: 'brand' | 'deep'
+  tone?: 'brand' | 'teal'
 }) {
   return (
     <Card className="flex flex-col gap-3 p-5">
@@ -101,7 +101,7 @@ export function Stat({
         {icon && (
           <span
             className={`grid h-8 w-8 place-items-center rounded-sm ${
-              tone === 'brand' ? 'bg-brand-50 text-brand-700' : 'bg-deep-50 text-deep'
+              tone === 'brand' ? 'bg-brand-50 text-brand-700' : 'bg-teal-50 text-teal-600'
             }`}
           >
             {icon}
@@ -120,7 +120,7 @@ export function Stat({
 
 export function ProgressBar({
   percent,
-  color = 'var(--color-deep)',
+  color = 'var(--color-teal)',
   height = 8,
 }: {
   percent: number
@@ -177,7 +177,7 @@ export function Donut({
   total,
   label,
   size = 130,
-  color = 'var(--color-brand-700)',
+  color = 'var(--color-teal)',
 }: {
   value: number
   total: number

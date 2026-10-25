@@ -48,7 +48,7 @@ export default function CrmError({
         <button
           type="button"
           onClick={reset}
-          className="mt-6 inline-flex items-center gap-2 rounded-md bg-brand-700 px-5 py-3 text-[15px] font-semibold text-white transition hover:bg-deep"
+          className="mt-6 inline-flex items-center gap-2 rounded-md bg-teal px-5 py-3 text-[15px] font-semibold text-white transition hover:bg-teal-600"
         >
           <RotateCw size={16} aria-hidden />
           Tentar novamente

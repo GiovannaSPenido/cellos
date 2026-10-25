@@ -26,7 +26,7 @@ export default function PlanCard({
       )}
 
       <header>
-        <p className="text-[11.5px] font-bold uppercase tracking-[0.04em] text-deep">
+        <p className="text-[11.5px] font-bold uppercase tracking-[0.04em] text-teal-600">
           {plan.tier}
         </p>
         <h3 className="mt-1 text-[21px] font-extrabold">{plan.name}</h3>
@@ -50,7 +50,7 @@ export default function PlanCard({
       <ul className="flex flex-col gap-2">
         {(detailed ? plan.includes : plan.includes.slice(0, 4)).map((item) => (
           <li key={item} className="flex items-start gap-2 text-[13px] text-ink-2">
-            <CircleCheck size={16} aria-hidden className="mt-0.5 shrink-0 text-deep" />
+            <CircleCheck size={16} aria-hidden className="mt-0.5 shrink-0 text-teal-600" />
             {item}
           </li>
         ))}
@@ -71,7 +71,7 @@ export default function PlanCard({
         href="/simular"
         className={`mt-auto rounded-sm px-4 py-2.5 text-center text-[14px] font-semibold transition ${
           plan.featured
-            ? 'bg-brand-700 text-white hover:bg-deep'
+            ? 'bg-teal text-white hover:bg-teal-600'
             : 'border border-line-2 text-ink-2 hover:bg-surface-2'
         }`}
       >

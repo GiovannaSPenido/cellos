@@ -37,7 +37,7 @@ export const LEAD_STAGES: {
   tone: BadgeTone
 }[] = [
   { id: 'NEW', label: 'A contatar', color: 'var(--color-muted-2)', tone: 'neutral' },
-  { id: 'IN_CONTACT', label: 'Em contato', color: 'var(--color-deep)', tone: 'deep' },
+  { id: 'IN_CONTACT', label: 'Em contato', color: 'var(--color-teal)', tone: 'teal' },
   { id: 'PROPOSAL_SENT', label: 'Proposta enviada', color: 'var(--color-caution)', tone: 'caution' },
   { id: 'NEGOTIATION', label: 'Negociação', color: 'var(--color-brand)', tone: 'brand' },
   { id: 'CONVERTED', label: 'Fechado', color: 'var(--color-positive)', tone: 'positive' },

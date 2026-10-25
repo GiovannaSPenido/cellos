@@ -6,7 +6,7 @@ import { CircleCheck, SendHorizontal } from 'lucide-react'
 import type { PersonTypeValue } from '@/contexts/commercial/domain/value-objects/PersonType'
 
 const FIELD =
-  'w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-brand-700 focus:ring-[3px] focus:ring-brand-50'
+  'w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50'
 
 /** RF09 — the form whose submission becomes a lead (RF06, RNG08). */
 export default function ContactForm() {
@@ -55,7 +55,7 @@ export default function ContactForm() {
   if (sent) {
     return (
       <div className="rounded-lg border border-line bg-surface p-10 text-center">
-        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-deep-50 text-deep">
+        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-teal-50 text-teal-600">
           <CircleCheck size={34} aria-hidden />
         </span>
         <h2 className="mt-5 text-[24px] font-extrabold">Recebemos sua mensagem!</h2>
@@ -159,7 +159,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={sending}
-        className="inline-flex items-center justify-center gap-2 rounded-md bg-brand-700 px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-deep disabled:opacity-60"
+        className="inline-flex items-center justify-center gap-2 rounded-md bg-teal px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-teal-600 disabled:opacity-60"
       >
         <SendHorizontal size={18} aria-hidden />
         {sending ? 'Enviando…' : 'Enviar e receber contato'}

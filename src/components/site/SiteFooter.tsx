@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Logo from '@/components/Logo'
 
 interface FooterItem {
   label: string
@@ -31,9 +32,7 @@ export default function SiteFooter() {
       <div className="mx-auto max-w-[1200px] px-6 py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
           <div>
-            <span className="font-mono text-[16px] font-bold tracking-[0.18em] text-brand-700">
-              CELLOS
-            </span>
+            <Logo height={32} />
             <p className="mt-4 max-w-[280px] text-[14px] leading-relaxed text-ink-2">
               Corretora de planos de saúde para pessoas e empresas. Orientação humana, do
               primeiro contato à renovação.

@@ -136,7 +136,7 @@ export default function PlanQuiz() {
     return (
       <div className="mx-auto max-w-[880px]">
         <div className="mb-9 text-center">
-          <Badge tone="deep" dot>
+          <Badge tone="teal" dot>
             Sua recomendação
           </Badge>
           <h1 className="mt-4 text-[clamp(28px,5vw,38px)] font-extrabold">
@@ -176,7 +176,7 @@ export default function PlanQuiz() {
               <ul className="mt-5 flex flex-wrap gap-2.5">
                 {best.reasons.map((reason) => (
                   <li key={reason}>
-                    <Badge tone="deep">✓ {reason}</Badge>
+                    <Badge tone="teal">✓ {reason}</Badge>
                   </li>
                 ))}
               </ul>
@@ -185,7 +185,7 @@ export default function PlanQuiz() {
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href={`/contato?plano=${encodeURIComponent(best.name)}&origem=quiz`}
-                className="inline-flex items-center gap-2 rounded-md bg-brand-700 px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-deep"
+                className="inline-flex items-center gap-2 rounded-md bg-teal px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-teal-600"
               >
                 <Handshake size={18} aria-hidden /> Quero contratar
               </Link>
@@ -293,12 +293,12 @@ export default function PlanQuiz() {
               className={`flex flex-col gap-3.5 rounded-lg border-[1.5px] p-5 text-left transition disabled:opacity-60 ${
                 selected
                   ? 'border-brand-700 bg-brand-50 shadow-[0_4px_12px_rgba(33,30,26,0.06)]'
-                  : 'border-line-2 bg-surface hover:border-deep hover:bg-deep-50'
+                  : 'border-line-2 bg-surface hover:border-teal hover:bg-teal-50'
               }`}
             >
               <span
                 className={`grid h-11 w-11 place-items-center rounded-md ${
-                  selected ? 'bg-brand-700 text-white' : 'bg-deep-50 text-deep'
+                  selected ? 'bg-brand-700 text-white' : 'bg-teal-50 text-teal-600'
                 }`}
               >
                 <Icon size={22} aria-hidden />

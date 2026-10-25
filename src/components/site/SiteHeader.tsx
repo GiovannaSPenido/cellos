@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { LockKeyhole, Menu, X } from 'lucide-react'
+import Logo from '@/components/Logo'
 
 const LINKS = [
   { href: '/planos', label: 'Planos' },
@@ -19,8 +20,8 @@ export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-canvas/85 backdrop-blur-md backdrop-saturate-150">
       <div className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between gap-4 px-6">
-        <Link href="/" className="font-mono text-[16px] font-bold tracking-[0.18em] text-brand-700">
-          CELLOS
+        <Link href="/" aria-label="Cellos — página inicial">
+          <Logo height={34} />
         </Link>
 
         <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
@@ -51,7 +52,7 @@ export default function SiteHeader() {
           </Link>
           <Link
             href="/descubra"
-            className="hidden rounded-sm bg-brand-700 px-3.5 py-2.5 text-[13.5px] font-semibold text-white transition hover:bg-deep sm:inline-block"
+            className="hidden rounded-sm bg-teal px-3.5 py-2.5 text-[13.5px] font-semibold text-white transition hover:bg-teal-600 sm:inline-block"
           >
             Encontrar meu plano
           </Link>

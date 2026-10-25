@@ -131,7 +131,7 @@ export default async function ClienteDetalhePage({ params }: PageProps<'/cliente
                 <ol className="flex flex-col gap-4">
                   {history.interactions.map((item) => (
                     <li key={item.id} className="flex gap-3.5">
-                      <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-deep-50 font-mono text-[10px] font-bold text-deep">
+                      <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-teal-50 font-mono text-[10px] font-bold text-teal-600">
                         {INTERACTION_LABELS[item.type].slice(0, 2).toUpperCase()}
                       </span>
                       <div className="min-w-0 flex-1">

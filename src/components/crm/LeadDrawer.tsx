@@ -154,7 +154,7 @@ export default function LeadDrawer({
               <Badge tone={stageOf(lead.status).tone} dot>
                 {stageOf(lead.status).label}
               </Badge>
-              <Badge tone={lead.personType === 'PJ' ? 'deep' : 'neutral'}>
+              <Badge tone={lead.personType === 'PJ' ? 'teal' : 'neutral'}>
                 {lead.personType}
                 {lead.personType === 'PJ' ? ` · ${plural(lead.lives, 'vida')}` : ''}
               </Badge>
@@ -236,7 +236,7 @@ export default function LeadDrawer({
                     value={type}
                     onChange={(e) => setType(e.target.value as InteractionTypeValue)}
                     aria-label="Tipo de contato"
-                    className="w-[128px] shrink-0 rounded-sm border border-line-2 bg-surface px-2.5 py-2 text-[13px] outline-none focus:border-brand-700"
+                    className="w-[128px] shrink-0 rounded-sm border border-line-2 bg-surface px-2.5 py-2 text-[13px] outline-none focus:border-teal"
                   >
                     {Object.entries(INTERACTION_LABELS).map(([value, label]) => (
                       <option key={value} value={value}>
@@ -250,14 +250,14 @@ export default function LeadDrawer({
                     onKeyDown={(e) => e.key === 'Enter' && registerInteraction()}
                     placeholder="O que aconteceu?"
                     aria-label="Descrição da interação"
-                    className="min-w-0 flex-1 rounded-sm border border-line-2 bg-surface px-3 py-2 text-[13.5px] outline-none focus:border-brand-700"
+                    className="min-w-0 flex-1 rounded-sm border border-line-2 bg-surface px-3 py-2 text-[13.5px] outline-none focus:border-teal"
                   />
                   <button
                     type="button"
                     onClick={registerInteraction}
                     disabled={busy || !description.trim()}
                     aria-label="Registrar"
-                    className="shrink-0 rounded-sm bg-brand-700 px-3 text-white transition hover:bg-deep disabled:opacity-50"
+                    className="shrink-0 rounded-sm bg-teal px-3 text-white transition hover:bg-teal-600 disabled:opacity-50"
                   >
                     <Plus size={16} aria-hidden />
                   </button>

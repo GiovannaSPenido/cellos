@@ -57,7 +57,7 @@ export default function LoginForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-brand-700 focus:ring-[3px] focus:ring-brand-50"
+          className="w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50"
         />
       </div>
 
@@ -73,7 +73,7 @@ export default function LoginForm() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-brand-700 focus:ring-[3px] focus:ring-brand-50"
+          className="w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50"
         />
       </div>
 
@@ -89,7 +89,7 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-2 w-full rounded-md bg-brand-700 px-5 py-3.5 text-[16px] font-semibold text-white transition hover:bg-deep disabled:opacity-60"
+        className="mt-2 w-full rounded-md bg-teal px-5 py-3.5 text-[16px] font-semibold text-white transition hover:bg-teal-600 disabled:opacity-60"
       >
         {submitting ? 'Entrando…' : 'Entrar no painel'}
       </button>

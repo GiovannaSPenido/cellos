@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { LayoutGrid, Filter, Users, Globe, LogOut } from 'lucide-react'
 import { Avatar } from '@/components/ui'
 import { createClient } from '@/lib/supabase/client'
+import Logo from '@/components/Logo'
 
 const NAV = [
   { href: '/dashboard', label: 'Dashboard', Icon: LayoutGrid },
@@ -25,9 +26,7 @@ export default function Sidebar({ name, role }: { name: string; role: string }) 
   return (
     <aside className="sticky top-0 flex h-screen w-[248px] shrink-0 flex-col border-r border-line bg-surface">
       <div className="px-5 pb-4 pt-6">
-        <span className="font-mono text-[15px] font-bold tracking-[0.18em] text-brand-700">
-          CELLOS
-        </span>
+        <Logo height={30} />
       </div>
 
       <nav className="flex flex-col gap-0.5 px-3.5">
@@ -61,7 +60,7 @@ export default function Sidebar({ name, role }: { name: string; role: string }) 
         </Link>
 
         <div className="flex items-center gap-2.5 px-2 pb-1 pt-2.5">
-          <Avatar name={name} size={36} tone="deep" />
+          <Avatar name={name} size={36} tone="teal" />
           <div className="min-w-0 flex-1">
             <p className="truncate text-[13.5px] font-bold">{name}</p>
             <p className="text-[11.5px] text-muted">{role}</p>

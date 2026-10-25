@@ -20,7 +20,14 @@
   --color-brand-600: #d97a64;
   --color-brand-700: #c85d4b;
 
-  /* complementar */
+  /* ação — o teal do design: botão principal, foco de campo, faixas */
+  --color-teal-50: #e9f4f3;
+  --color-teal-100: #c5e3e0;
+  --color-teal: #0e8c84;
+  --color-teal-600: #0a746d;
+  --color-teal-700: #085c57;
+
+  /* bordô da logo — texto sobre fundo claro, painéis escuros */
   --color-deep-50: #ebe5e7;
   --color-deep-100: #d9bfc3;
   --color-deep: #4a2428;

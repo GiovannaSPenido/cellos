@@ -144,7 +144,7 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimit
                     </div>
 
                     <div className="mt-2.5">
-                      <Badge tone={lead.personType === 'PJ' ? 'deep' : 'neutral'}>
+                      <Badge tone={lead.personType === 'PJ' ? 'teal' : 'neutral'}>
                         {lead.personType}
                         {lead.personType === 'PJ' ? ` · ${plural(lead.lives, 'vida')}` : ''}
                       </Badge>

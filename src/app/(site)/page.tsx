@@ -63,7 +63,7 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/descubra"
-                className="inline-flex items-center gap-2 rounded-md bg-brand-700 px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-deep"
+                className="inline-flex items-center gap-2 rounded-md bg-teal px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-teal-600"
               >
                 <Wand2 size={18} aria-hidden /> Descubra seu plano
               </Link>
@@ -78,7 +78,7 @@ export default async function HomePage() {
             <ul className="mt-10 flex flex-wrap gap-7">
               {PROMISES.map(({ Icon, title, sub }) => (
                 <li key={title} className="flex items-start gap-2.5">
-                  <Icon size={21} aria-hidden className="mt-0.5 shrink-0 text-deep" />
+                  <Icon size={21} aria-hidden className="mt-0.5 shrink-0 text-teal-600" />
                   <span>
                     <span className="block text-[14px] font-bold">{title}</span>
                     <span className="block text-[12.5px] text-muted">{sub}</span>
@@ -109,7 +109,7 @@ export default async function HomePage() {
                 className="rounded-lg border border-line bg-surface p-7 shadow-[0_1px_2px_rgba(33,30,26,0.05)]"
               >
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="grid h-11 w-11 place-items-center rounded-md bg-deep-50 text-deep">
+                  <span className="grid h-11 w-11 place-items-center rounded-md bg-teal-50 text-teal-600">
                     <Icon size={22} aria-hidden />
                   </span>
                   <span className="tabular font-mono text-[24px] font-semibold text-line-2">
@@ -139,7 +139,7 @@ export default async function HomePage() {
               </div>
               <Link
                 href="/planos"
-                className="inline-flex items-center gap-2 text-[14.5px] font-semibold text-brand-700 transition hover:text-deep"
+                className="inline-flex items-center gap-2 text-[14.5px] font-semibold text-brand-700 transition hover:text-teal-600"
               >
                 Ver todos os planos <ArrowRight size={16} aria-hidden />
               </Link>
@@ -156,7 +156,7 @@ export default async function HomePage() {
 
       {/* descubra */}
       <section className="mx-auto max-w-[1200px] px-6 py-16">
-        <div className="relative overflow-hidden rounded-xl bg-deep px-8 py-14 text-white sm:px-14">
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-teal to-teal-600 px-8 py-14 text-white sm:px-14">
           <span
             aria-hidden
             className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-brand/15"
@@ -178,7 +178,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/descubra"
-              className="mt-7 inline-flex items-center gap-2 rounded-md bg-white px-6 py-4 text-[16px] font-semibold text-deep transition hover:bg-brand-50"
+              className="mt-7 inline-flex items-center gap-2 rounded-md bg-white px-6 py-4 text-[16px] font-semibold text-teal-600 transition hover:bg-brand-50"
             >
               <Wand2 size={18} aria-hidden /> Começar agora
             </Link>
@@ -197,7 +197,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/contato"
-            className="rounded-md bg-brand-700 px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-deep"
+            className="rounded-md bg-teal px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-teal-600"
           >
             Falar com a Cellos
           </Link>

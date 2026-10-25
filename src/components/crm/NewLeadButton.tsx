@@ -6,7 +6,7 @@ import { Plus, X } from 'lucide-react'
 import type { PersonTypeValue } from '@/contexts/commercial/domain/value-objects/PersonType'
 
 const FIELD =
-  'w-full rounded-sm border border-line-2 bg-surface px-3 py-2.5 text-[14px] outline-none transition focus:border-brand-700 focus:ring-[3px] focus:ring-brand-50'
+  'w-full rounded-sm border border-line-2 bg-surface px-3 py-2.5 text-[14px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50'
 
 const ORIGINS = ['Prospecção ativa', 'Indicação', 'Instagram', 'Site — cotação', 'Feira / evento']
 
@@ -62,7 +62,7 @@ export default function NewLeadButton() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 rounded-sm bg-brand-700 px-3.5 py-2 text-[13.5px] font-semibold text-white transition hover:bg-deep"
+        className="inline-flex items-center gap-2 rounded-sm bg-teal px-3.5 py-2 text-[13.5px] font-semibold text-white transition hover:bg-teal-600"
       >
         <Plus size={16} aria-hidden /> Novo lead
       </button>
@@ -192,7 +192,7 @@ export default function NewLeadButton() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 rounded-sm bg-brand-700 px-4 py-2.5 text-[14px] font-semibold text-white transition hover:bg-deep disabled:opacity-60"
+                  className="flex-1 rounded-sm bg-teal px-4 py-2.5 text-[14px] font-semibold text-white transition hover:bg-teal-600 disabled:opacity-60"
                 >
                   {saving ? 'Salvando…' : 'Adicionar lead'}
                 </button>

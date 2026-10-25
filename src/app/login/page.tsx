@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import LoginForm from './LoginForm'
+import Logo from '@/components/Logo'
 
 export const metadata = {
   title: 'Área do corretor — Cellos',
@@ -11,6 +12,7 @@ export default function LoginPage() {
       {/* formulário */}
       <div className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-[8%]">
         <div className="w-full max-w-[380px]">
+          <Logo height={36} className="mb-9" />
           <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-700">
             Área do corretor
           </p>

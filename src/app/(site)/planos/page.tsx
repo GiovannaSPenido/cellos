@@ -126,7 +126,7 @@ export default async function PlanosPage() {
       <div className="mt-12 flex flex-wrap justify-center gap-3">
         <Link
           href="/descubra"
-          className="inline-flex items-center gap-2 rounded-md bg-brand-700 px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-deep"
+          className="inline-flex items-center gap-2 rounded-md bg-teal px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-teal-600"
         >
           <Wand2 size={18} aria-hidden /> Descobrir meu plano ideal
         </Link>
