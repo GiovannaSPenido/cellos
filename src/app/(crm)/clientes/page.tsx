@@ -1,6 +1,7 @@
 import { getContainer } from '@/lib/container'
 import PageHeader from '@/components/crm/PageHeader'
 import ClientsTable from '@/components/crm/ClientsTable'
+import { plural } from '@/lib/format'
 
 export const metadata = { title: 'Clientes — Cellos' }
 
@@ -17,7 +18,7 @@ export default async function ClientesPage() {
         subtitle={
           clients.length === 0
             ? 'Clientes aparecem aqui quando um lead é convertido'
-            : `${clients.length} clientes · ${lives} vidas`
+            : `${plural(clients.length, 'cliente')} · ${plural(lives, 'vida')}`
         }
       />
 

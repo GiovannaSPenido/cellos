@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Flame, Calendar } from 'lucide-react'
 import type { LeadPrimitive } from '@/contexts/commercial/domain/entities/Lead'
 import type { LeadStatusValue } from '@/contexts/commercial/domain/value-objects/LeadStatus'
-import { LEAD_STAGES, formatBRL, formatShortDate } from '@/lib/format'
+import { LEAD_STAGES, formatBRL, formatShortDate, plural } from '@/lib/format'
 import { Badge } from '@/components/ui'
 import LeadDrawer from './LeadDrawer'
 
@@ -146,7 +146,7 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimit
                     <div className="mt-2.5">
                       <Badge tone={lead.personType === 'PJ' ? 'deep' : 'neutral'}>
                         {lead.personType}
-                        {lead.personType === 'PJ' ? ` · ${lead.lives} vidas` : ''}
+                        {lead.personType === 'PJ' ? ` · ${plural(lead.lives, 'vida')}` : ''}
                       </Badge>
                     </div>
 

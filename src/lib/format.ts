@@ -71,3 +71,11 @@ export const PERSON_TYPE_LABELS = {
   PF: 'Pessoa física',
   PJ: 'Empresa',
 } as const
+
+/**
+ * Agreement for counted nouns: "1 vida" but "2 vidas".
+ * Pass the plural only when it is not formed by adding an "s".
+ */
+export function plural(count: number, singular: string, pluralForm?: string): string {
+  return `${count} ${count === 1 ? singular : (pluralForm ?? singular + 's')}`
+}

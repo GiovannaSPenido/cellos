@@ -2,7 +2,7 @@ import { getContainer } from '@/lib/container'
 import PageHeader from '@/components/crm/PageHeader'
 import NewLeadButton from '@/components/crm/NewLeadButton'
 import KanbanBoard from '@/components/crm/KanbanBoard'
-import { formatBRL } from '@/lib/format'
+import { formatBRL, plural } from '@/lib/format'
 
 export const metadata = { title: 'Prospecção — Cellos' }
 
@@ -20,7 +20,7 @@ export default async function ProspeccaoPage() {
         subtitle={
           leads.length === 0
             ? 'Arraste os cards entre as etapas do funil'
-            : `${open.length} leads ativos · ${formatBRL(pipeline)} em pipeline`
+            : `${plural(open.length, 'lead ativo', 'leads ativos')} · ${formatBRL(pipeline)} em pipeline`
         }
         actions={<NewLeadButton />}
       />

@@ -10,6 +10,7 @@ import {
   PERSON_TYPE_LABELS,
   formatBRL,
   formatDate,
+  plural,
 } from '@/lib/format'
 
 export default async function ClienteDetalhePage({ params }: PageProps<'/clientes/[id]'>) {
@@ -73,7 +74,7 @@ export default async function ClienteDetalhePage({ params }: PageProps<'/cliente
                 <div>
                   <p className="text-[18px] font-extrabold">{plan?.name ?? '—'}</p>
                   <p className="text-[13px] text-brand-700">
-                    {client.lives} {client.lives > 1 ? 'vidas' : 'vida'}
+                    {plural(client.lives, 'vida')}
                     {plan ? ` · ${plan.carrier}` : ''}
                   </p>
                 </div>

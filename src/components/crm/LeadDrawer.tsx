@@ -13,6 +13,7 @@ import {
   PERSON_TYPE_LABELS,
   formatBRL,
   formatDate,
+  plural,
   stageOf,
 } from '@/lib/format'
 
@@ -155,7 +156,7 @@ export default function LeadDrawer({
               </Badge>
               <Badge tone={lead.personType === 'PJ' ? 'deep' : 'neutral'}>
                 {lead.personType}
-                {lead.personType === 'PJ' ? ` · ${lead.lives} vidas` : ''}
+                {lead.personType === 'PJ' ? ` · ${plural(lead.lives, 'vida')}` : ''}
               </Badge>
               {lead.hot && (
                 <Badge tone="brand">

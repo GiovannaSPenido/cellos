@@ -11,6 +11,7 @@ import {
   formatBRL,
   formatDate,
   formatShortDate,
+  plural,
   stageOf,
 } from '@/lib/format'
 
@@ -89,7 +90,7 @@ export default async function DashboardPage() {
             label="Clientes ativos"
             value={clients.length}
             icon={<Users size={17} aria-hidden />}
-            sub={`${lives} vidas no total`}
+            sub={`${plural(lives, 'vida')} no total`}
           />
           <Stat
             label="Receita mensal"
