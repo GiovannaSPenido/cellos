@@ -18,7 +18,6 @@ export default function Logo({
       width={Math.round(height * RATIO)}
       priority
       className={className}
-      style={{ height, width: 'auto' }}
     />
   )
 }

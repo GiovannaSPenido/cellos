@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ShieldCheck,
   UsersRound,
@@ -46,7 +47,7 @@ export default async function HomePage() {
     <>
       {/* hero */}
       <section className="border-b border-line bg-gradient-to-br from-canvas to-surface-2">
-        <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
+        <div className="mx-auto grid max-w-[1200px] items-center gap-12 px-6 py-16 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:py-20">
           <div className="max-w-[620px]">
             <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-700">
               Planos de saúde · PF e PJ
@@ -86,6 +87,17 @@ export default async function HomePage() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="relative h-[280px] w-full overflow-hidden rounded-xl shadow-[0_18px_40px_-12px_rgba(33,30,26,0.18)] sm:h-[360px] lg:h-[400px]">
+            <Image
+              src="/hero-cellos.avif"
+              alt="Médica auscultando um paciente sorridente durante uma consulta"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 52vw"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
