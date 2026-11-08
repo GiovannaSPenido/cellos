@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server'
-import { readJson, requireApiUser, toErrorResponse } from '@/lib/api'
+import { parseDate, readJson, requireApiUser, toErrorResponse } from '@/lib/api'
 import type { UpdateClientDTO } from '@/contexts/commercial/application/usecases/UpdateClientUseCase'
 import NotFoundException from '@/shared/domain/exceptions/NotFoundException'
 
@@ -45,7 +45,7 @@ export async function PATCH(request: NextRequest, ctx: RouteContext<'/api/client
           ? undefined
           : body.renewsOn === null
             ? null
-            : new Date(body.renewsOn),
+            : parseDate(body.renewsOn, 'renewsOn'),
     })
 
     return Response.json({ client })

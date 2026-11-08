@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server'
-import { readJson, required, requireApiUser, toErrorResponse } from '@/lib/api'
+import { parseDate, readJson, required, requireApiUser, toErrorResponse } from '@/lib/api'
 import type { InteractionTypeValue } from '@/contexts/commercial/domain/value-objects/InteractionType'
 
 interface Body {
@@ -39,13 +39,13 @@ export async function POST(request: NextRequest, ctx: RouteContext<'/api/leads/[
       userId: user.id,
       type: required(body.type, 'type'),
       description: required(body.description, 'description'),
-      occurredAt: body.occurredAt ? new Date(body.occurredAt) : undefined,
+      occurredAt: body.occurredAt ? parseDate(body.occurredAt, 'occurredAt') : undefined,
       nextContactAt:
         body.nextContactAt === undefined
           ? undefined
           : body.nextContactAt === null
             ? null
-            : new Date(body.nextContactAt),
+            : parseDate(body.nextContactAt, 'nextContactAt'),
     })
 
     return Response.json({ interaction }, { status: 201 })

@@ -4,18 +4,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, Handshake } from 'lucide-react'
 import type { LeadPrimitive } from '@/contexts/commercial/domain/entities/Lead'
 import type { HealthPlanPrimitive } from '@/contexts/commercial/domain/entities/HealthPlan'
-import { formatBRL } from '@/lib/format'
+import { formatBRL, toInputDate } from '@/lib/format'
 
 const FIELD =
   'w-full rounded-sm border border-line-2 bg-surface px-3 py-2.5 text-[14px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50'
-
-/** `YYYY-MM-DD` for a date input, from the local calendar. */
-function toInputDate(date: Date): string {
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, '0')
-  const d = String(date.getDate()).padStart(2, '0')
-  return `${y}-${m}-${d}`
-}
 
 /**
  * RNG05 — turns a lead into a client. The lead row survives, so every

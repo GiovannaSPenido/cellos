@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { X, Plus, Flame, Handshake } from 'lucide-react'
+import { X, Plus, Flame, Handshake, Pencil } from 'lucide-react'
 import type { LeadPrimitive } from '@/contexts/commercial/domain/entities/Lead'
 import type { InteractionPrimitive } from '@/contexts/commercial/domain/entities/Interaction'
 import type { InteractionTypeValue } from '@/contexts/commercial/domain/value-objects/InteractionType'
 import type { LeadStatusValue } from '@/contexts/commercial/domain/value-objects/LeadStatus'
 import { Avatar, Badge } from '@/components/ui'
 import ConvertLeadForm from './ConvertLeadForm'
+import EditLeadForm from './EditLeadForm'
 import {
   INTERACTION_LABELS,
   LEAD_STAGES,
@@ -41,6 +42,7 @@ export default function LeadDrawer({
   const [type, setType] = useState<InteractionTypeValue>('CALL')
   const [busy, setBusy] = useState(false)
   const [converting, setConverting] = useState(startConverting)
+  const [editing, setEditing] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -144,14 +146,27 @@ export default function LeadDrawer({
                 )}
               </div>
             </div>
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Fechar"
-              className="shrink-0 rounded-sm p-1.5 text-muted transition hover:bg-surface-2 hover:text-ink"
-            >
-              <X size={19} aria-hidden />
-            </button>
+            <div className="flex shrink-0 items-center gap-1">
+              {!editing && !converting && (
+                <button
+                  type="button"
+                  onClick={() => setEditing(true)}
+                  aria-label="Editar lead"
+                  title="Editar lead"
+                  className="rounded-sm p-1.5 text-muted transition hover:bg-surface-2 hover:text-ink"
+                >
+                  <Pencil size={17} aria-hidden />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Fechar"
+                className="rounded-sm p-1.5 text-muted transition hover:bg-surface-2 hover:text-ink"
+              >
+                <X size={19} aria-hidden />
+              </button>
+            </div>
           </div>
 
           {lead && (
@@ -181,6 +196,18 @@ export default function LeadDrawer({
 
           {!lead && !error && <p className="text-[14px] text-muted">Carregando…</p>}
 
+          {lead && editing && (
+            <EditLeadForm
+              lead={lead}
+              onBack={() => setEditing(false)}
+              onSaved={(updated) => {
+                setData((current) => (current ? { ...current, lead: updated } : current))
+                setEditing(false)
+                onChanged()
+              }}
+            />
+          )}
+
           {lead && converting && (
             <ConvertLeadForm
               lead={lead}
@@ -192,7 +219,7 @@ export default function LeadDrawer({
             />
           )}
 
-          {lead && !converting && (
+          {lead && !converting && !editing && (
             <div className="flex flex-col gap-6">
               {/* dados */}
               <dl className="flex flex-col">

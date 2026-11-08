@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server'
-import { readJson, requireApiUser, toErrorResponse } from '@/lib/api'
+import { parseDate, readJson, requireApiUser, toErrorResponse } from '@/lib/api'
 import type { UpdateLeadDTO } from '@/contexts/commercial/application/usecases/UpdateLeadUseCase'
 import NotFoundException from '@/shared/domain/exceptions/NotFoundException'
 
@@ -31,7 +31,7 @@ export async function PATCH(request: NextRequest, ctx: RouteContext<'/api/leads/
           ? undefined
           : body.nextContactAt === null
             ? null
-            : new Date(body.nextContactAt),
+            : parseDate(body.nextContactAt, 'nextContactAt'),
     })
 
     return Response.json({ lead })

@@ -4,6 +4,7 @@ import { ArrowLeft, Phone, Mail, MapPin, Lightbulb } from 'lucide-react'
 import { getContainer } from '@/lib/container'
 import PageHeader from '@/components/crm/PageHeader'
 import { Avatar, Badge, Card, EmptyState } from '@/components/ui'
+import EditClientForm from '@/components/crm/EditClientForm'
 import {
   CLIENT_STATUS_LABELS,
   INTERACTION_LABELS,
@@ -12,6 +13,17 @@ import {
   formatDate,
   plural,
 } from '@/lib/format'
+
+/** Names the browser tab after the client, not the site. */
+export async function generateMetadata({ params }: PageProps<'/clientes/[id]'>) {
+  const { id } = await params
+  const container = await getContainer()
+  const client = await container.repositories.clients.findById(id)
+  if (!client) return { title: 'Cliente — Cellos' }
+
+  const lead = await container.repositories.leads.findById(client.leadId)
+  return { title: `${lead?.displayName ?? 'Cliente'} — Cellos` }
+}
 
 export default async function ClienteDetalhePage({ params }: PageProps<'/clientes/[id]'>) {
   const { id } = await params
@@ -62,6 +74,8 @@ export default async function ClienteDetalhePage({ params }: PageProps<'/cliente
               </p>
             </div>
           </div>
+
+          <EditClientForm client={client.toPrimitive()} />
         </Card>
 
         <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
