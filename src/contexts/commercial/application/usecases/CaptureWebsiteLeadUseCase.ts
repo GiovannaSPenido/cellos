@@ -12,6 +12,7 @@ export interface WebsiteLeadDTO {
   phone: string
   personType: PersonTypeValue
   company?: string | null
+  cnpj?: string | null
   message?: string | null
   /** Plan the visitor was looking at, or the quiz recommendation. */
   planOfInterest?: string | null
@@ -76,6 +77,7 @@ export class CaptureWebsiteLeadUseCase {
       phone: dto.phone,
       personType: dto.personType,
       company: dto.company ?? null,
+      cnpj: dto.cnpj ?? null,
       planOfInterest: dto.planOfInterest ?? null,
       origin,
       notes: dto.message ?? null,

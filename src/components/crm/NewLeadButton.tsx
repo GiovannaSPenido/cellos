@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Plus, X } from 'lucide-react'
 import type { PersonTypeValue } from '@/contexts/commercial/domain/value-objects/PersonType'
+import { maskCNPJ } from '@/lib/format'
 
 const FIELD =
   'w-full rounded-sm border border-line-2 bg-surface px-3 py-2.5 text-[14px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50'
@@ -17,6 +18,8 @@ export default function NewLeadButton() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [personType, setPersonType] = useState<PersonTypeValue>('PJ')
+  const [cnpj, setCnpj] = useState('')
+
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -34,6 +37,7 @@ export default function NewLeadButton() {
         personType,
         name: String(form.get('name') ?? '').trim(),
         company: personType === 'PJ' ? String(form.get('company') ?? '').trim() : null,
+        cnpj: personType === 'PJ' ? cnpj : null,
         role: String(form.get('role') ?? '').trim() || null,
         email: String(form.get('email') ?? '').trim(),
         phone: String(form.get('phone') ?? '').trim(),

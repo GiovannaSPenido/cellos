@@ -14,6 +14,8 @@ export interface LeadProps {
   name: string
   company?: string | null
   role?: string | null
+  /** Digits only, no mask. Only meaningful for a company lead. */
+  cnpj?: string | null
   email: Email | string
   phone: Phone | string
   personType: PersonType | string
@@ -35,6 +37,7 @@ export interface LeadPrimitive extends AggregateRootPrimitive {
   name: string
   company: string | null
   role: string | null
+  cnpj: string | null
   email: string
   phone: string
   personType: PersonTypeValue
@@ -53,6 +56,7 @@ export class Lead extends AggregateRoot {
   name: string
   company: string | null
   role: string | null
+  cnpj: string | null
   email: Email
   phone: Phone
   personType: PersonType
@@ -72,6 +76,7 @@ export class Lead extends AggregateRoot {
     this.name = props.name
     this.company = props.company ?? null
     this.role = props.role ?? null
+    this.cnpj = props.cnpj ?? null
     this.email = props.email instanceof Email ? props.email : Email.create(props.email)
     this.phone = props.phone instanceof Phone ? props.phone : Phone.create(props.phone)
     this.personType =
@@ -149,6 +154,7 @@ export class Lead extends AggregateRoot {
     name?: string
     company?: string | null
     role?: string | null
+    cnpj?: string | null
     email?: Email | string
     phone?: Phone | string
     notes?: string | null
@@ -156,6 +162,7 @@ export class Lead extends AggregateRoot {
     if (details.name !== undefined) this.name = details.name
     if (details.company !== undefined) this.company = details.company
     if (details.role !== undefined) this.role = details.role
+    if (details.cnpj !== undefined) this.cnpj = details.cnpj
     if (details.email !== undefined) {
       this.email = details.email instanceof Email ? details.email : Email.create(details.email)
     }
@@ -195,6 +202,7 @@ export class Lead extends AggregateRoot {
       name: this.name,
       company: this.company,
       role: this.role,
+      cnpj: this.cnpj,
       email: this.email.toPrimitive(),
       phone: this.phone.toPrimitive(),
       personType: this.personType.toPrimitive(),

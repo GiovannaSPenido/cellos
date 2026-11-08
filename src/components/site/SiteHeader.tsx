@@ -19,9 +19,9 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-canvas/85 backdrop-blur-md backdrop-saturate-150">
-      <div className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between gap-4 px-6">
+      <div className="mx-auto flex h-[88px] max-w-[1200px] items-center justify-between gap-4 px-6">
         <Link href="/" aria-label="Cellos — página inicial">
-          <Logo height={34} />
+          <Logo height={46} />
         </Link>
 
         <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">

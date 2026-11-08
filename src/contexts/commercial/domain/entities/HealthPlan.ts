@@ -15,12 +15,17 @@ const TIER_LEVELS: Record<string, number> = {
   Premium: 4,
 }
 
+export type PlanKind = 'MEDICAL' | 'DENTAL'
+export type PlanAudience = 'INDIVIDUAL' | 'CORPORATE' | 'BOTH'
+
 export interface HealthPlanProps {
   id: string
   code: string
   name: string
   carrier: string
   tier: string
+  kind?: PlanKind
+  audience?: PlanAudience
   coverageType: string
   coverageArea: string
   accommodation: string
@@ -42,6 +47,8 @@ export interface HealthPlanPrimitive extends EntityPrimitive {
   name: string
   carrier: string
   tier: string
+  kind: PlanKind
+  audience: PlanAudience
   coverageType: string
   coverageArea: string
   accommodation: string
@@ -62,6 +69,8 @@ export class HealthPlan extends Entity {
   name: string
   carrier: string
   tier: string
+  kind: PlanKind
+  audience: PlanAudience
   coverageType: string
   coverageArea: string
   accommodation: string
@@ -83,6 +92,8 @@ export class HealthPlan extends Entity {
     this.name = props.name
     this.carrier = props.carrier
     this.tier = props.tier
+    this.kind = props.kind ?? 'MEDICAL'
+    this.audience = props.audience ?? 'BOTH'
     this.coverageType = props.coverageType
     this.coverageArea = props.coverageArea
     this.accommodation = props.accommodation
@@ -135,6 +146,15 @@ export class HealthPlan extends Entity {
     return this.isNationwide || /estadual/i.test(this.coverageArea)
   }
 
+  get isDental(): boolean {
+    return this.kind === 'DENTAL'
+  }
+
+  /** Whether this plan is sold to the given audience. */
+  servesAudience(audience: 'INDIVIDUAL' | 'CORPORATE'): boolean {
+    return this.audience === 'BOTH' || this.audience === audience
+  }
+
   get coversMaternity(): boolean {
     // "Obstetrícia" carries its accent on the i, and "obstetra"/"parto" also appear.
     return /obstetr|parto|matern/i.test(this.coverageType)
@@ -163,6 +183,8 @@ export class HealthPlan extends Entity {
       name: this.name,
       carrier: this.carrier,
       tier: this.tier,
+      kind: this.kind,
+      audience: this.audience,
       coverageType: this.coverageType,
       coverageArea: this.coverageArea,
       accommodation: this.accommodation,

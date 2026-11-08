@@ -29,6 +29,7 @@ export class CreateLeadUseCase {
       personType: dto.personType,
       company: dto.company ?? null,
       role: dto.role ?? null,
+      cnpj: dto.cnpj ?? null,
       planOfInterest: dto.planOfInterest ?? null,
       lives: dto.lives ?? 1,
       estimatedValue:

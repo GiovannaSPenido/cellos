@@ -14,6 +14,7 @@ export interface LeadRow {
   nome: string
   empresa: string | null
   cargo: string | null
+  cnpj: string | null
   email: string
   telefone: string
   tipo_pessoa: string
@@ -145,6 +146,7 @@ export class SupabaseLeadRepository implements LeadRepository {
       nome: data.name,
       empresa: data.company,
       cargo: data.role,
+      cnpj: data.cnpj,
       email: data.email,
       telefone: data.phone,
       tipo_pessoa: data.personType,
@@ -169,6 +171,7 @@ export class SupabaseLeadRepository implements LeadRepository {
       name: row.nome,
       company: row.empresa,
       role: row.cargo,
+      cnpj: row.cnpj,
       email: row.email,
       phone: row.telefone,
       personType: row.tipo_pessoa,

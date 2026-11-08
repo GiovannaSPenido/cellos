@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { CircleCheck, SendHorizontal } from 'lucide-react'
 import type { PersonTypeValue } from '@/contexts/commercial/domain/value-objects/PersonType'
+import { maskCNPJ } from '@/lib/format'
 
 const FIELD =
   'w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50'
@@ -15,6 +16,8 @@ export default function ContactForm() {
   const origin = searchParams.get('origem') === 'quiz' ? 'quiz' : 'contact-form'
 
   const [personType, setPersonType] = useState<PersonTypeValue>('PF')
+  const [cnpj, setCnpj] = useState('')
+
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -35,6 +38,7 @@ export default function ContactForm() {
         email: String(form.get('email') ?? '').trim(),
         phone: String(form.get('phone') ?? '').trim(),
         company: personType === 'PJ' ? String(form.get('company') ?? '').trim() : null,
+        cnpj: personType === 'PJ' ? cnpj : null,
         message: String(form.get('message') ?? '').trim() || null,
         planOfInterest: planFromQuery,
         origin,
@@ -132,10 +136,25 @@ export default function ContactForm() {
       </fieldset>
 
       {personType === 'PJ' && (
+        <>
+          <label className="flex flex-col gap-1.5">
+            <span className="text-[13px] font-semibold text-ink-2">Empresa</span>
+            <input name="company" required placeholder="Nome da empresa" className={FIELD} />
+          </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-[13px] font-semibold text-ink-2">Empresa</span>
-          <input name="company" required placeholder="Nome da empresa" className={FIELD} />
+          <span className="text-[13px] font-semibold text-ink-2">
+            CNPJ <span className="font-normal text-muted">(opcional)</span>
+          </span>
+          <input
+            name="cnpj"
+            inputMode="numeric"
+            value={cnpj}
+            onChange={(e) => setCnpj(maskCNPJ(e.target.value))}
+            placeholder="00.000.000/0000-00"
+            className={FIELD}
+          />
         </label>
+        </>
       )}
 
       <label className="flex flex-col gap-1.5">

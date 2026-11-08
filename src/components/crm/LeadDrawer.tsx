@@ -14,6 +14,7 @@ import {
   LEAD_STAGES,
   PERSON_TYPE_LABELS,
   formatBRL,
+  formatCNPJ,
   formatDate,
   plural,
   stageOf,
@@ -226,6 +227,7 @@ export default function LeadDrawer({
                 {[
                   ['Telefone', lead.phone],
                   ['E-mail', lead.email],
+                  ...(lead.cnpj ? [['CNPJ', formatCNPJ(lead.cnpj)]] : []),
                   ['Origem', lead.origin ?? '—'],
                   ['Plano de interesse', lead.planOfInterest ?? '—'],
                   [

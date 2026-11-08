@@ -8,6 +8,7 @@ export interface UpdateLeadDTO {
   name?: string
   company?: string | null
   role?: string | null
+  cnpj?: string | null
   email?: string
   phone?: string
   notes?: string | null
@@ -47,6 +48,7 @@ export class UpdateLeadUseCase {
       name: dto.name,
       company: dto.company,
       role: dto.role,
+      cnpj: dto.cnpj,
       email: dto.email,
       phone: dto.phone,
       notes: dto.notes,

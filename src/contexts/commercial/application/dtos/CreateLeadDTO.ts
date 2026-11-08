@@ -10,6 +10,8 @@ export interface CreateLeadDTO {
   personType: PersonTypeValue
   company?: string | null
   role?: string | null
+  /** Digits only. Collected from a company lead (pedido do cliente, 08/11). */
+  cnpj?: string | null
   planOfInterest?: string | null
   lives?: number
   /** Estimated monthly value, in reais. */

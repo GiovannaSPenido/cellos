@@ -2,6 +2,7 @@ import type { NextRequest } from 'next/server'
 import { parseDate, readJson, requireApiUser, toErrorResponse } from '@/lib/api'
 import type { UpdateLeadDTO } from '@/contexts/commercial/application/usecases/UpdateLeadUseCase'
 import NotFoundException from '@/shared/domain/exceptions/NotFoundException'
+import { cnpjDigits } from '@/lib/format'
 
 /** RF03 and RF10 — a lead with its interaction history. */
 export async function GET(_request: NextRequest, ctx: RouteContext<'/api/leads/[id]'>) {
@@ -26,6 +27,7 @@ export async function PATCH(request: NextRequest, ctx: RouteContext<'/api/leads/
 
     const lead = await container.updateLead.execute(id, {
       ...body,
+      cnpj: body.cnpj === undefined ? undefined : cnpjDigits(body.cnpj ?? '') || null,
       nextContactAt:
         body.nextContactAt === undefined
           ? undefined

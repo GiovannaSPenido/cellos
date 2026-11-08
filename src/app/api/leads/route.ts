@@ -2,6 +2,7 @@ import type { NextRequest } from 'next/server'
 import { readJson, required, requireApiUser, toErrorResponse } from '@/lib/api'
 import type { CreateLeadDTO } from '@/contexts/commercial/application/dtos/CreateLeadDTO'
 import type { LeadStatusValue } from '@/contexts/commercial/domain/value-objects/LeadStatus'
+import { cnpjDigits } from '@/lib/format'
 
 /** RF03 — list the leads the caller may see. */
 export async function GET(request: NextRequest) {
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
       phone: required(body.phone, 'phone'),
       personType: required(body.personType, 'personType'),
       company: body.company ?? null,
+      cnpj: body.cnpj ? cnpjDigits(body.cnpj) || null : null,
       role: body.role ?? null,
       planOfInterest: body.planOfInterest ?? null,
       lives: body.lives,

@@ -2,6 +2,7 @@ import type { NextRequest } from 'next/server'
 import { readJson, required, toErrorResponse } from '@/lib/api'
 import { getServiceRoleContainer } from '@/lib/container'
 import type { WebsiteLeadDTO } from '@/contexts/commercial/application/usecases/CaptureWebsiteLeadUseCase'
+import { cnpjDigits } from '@/lib/format'
 
 /**
  * RF06 and RNG08 — a visitor's enquiry becomes a lead with no re-typing.
@@ -21,6 +22,7 @@ export async function POST(request: NextRequest) {
       phone: required(body.phone, 'phone'),
       personType: required(body.personType, 'personType'),
       company: body.company ?? null,
+      cnpj: body.cnpj ? cnpjDigits(body.cnpj) || null : null,
       message: body.message ?? null,
       planOfInterest: body.planOfInterest ?? null,
       origin: body.origin,

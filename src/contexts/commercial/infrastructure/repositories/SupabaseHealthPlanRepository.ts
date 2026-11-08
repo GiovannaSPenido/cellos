@@ -10,6 +10,8 @@ export interface HealthPlanRow {
   nome: string
   operadora: string
   tier: string
+  modalidade: string
+  contratacao: string
   tipo_cobertura: string
   abrangencia: string
   acomodacao: string
@@ -106,6 +108,8 @@ export class SupabaseHealthPlanRepository implements HealthPlanRepository {
       nome: data.name,
       operadora: data.carrier,
       tier: data.tier,
+      modalidade: data.kind,
+      contratacao: data.audience,
       tipo_cobertura: data.coverageType,
       abrangencia: data.coverageArea,
       acomodacao: data.accommodation,
@@ -130,6 +134,8 @@ export class SupabaseHealthPlanRepository implements HealthPlanRepository {
       name: row.nome,
       carrier: row.operadora,
       tier: row.tier,
+      kind: row.modalidade as 'MEDICAL' | 'DENTAL',
+      audience: row.contratacao as 'INDIVIDUAL' | 'CORPORATE' | 'BOTH',
       coverageType: row.tipo_cobertura,
       coverageArea: row.abrangencia,
       accommodation: row.acomodacao,

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ArrowLeft, Check } from 'lucide-react'
 import type { LeadPrimitive } from '@/contexts/commercial/domain/entities/Lead'
-import { toInputDate } from '@/lib/format'
+import { maskCNPJ, toInputDate } from '@/lib/format'
 
 const FIELD =
   'w-full rounded-sm border border-line-2 bg-surface px-3 py-2.5 text-[14px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50'
@@ -23,6 +23,7 @@ export default function EditLeadForm({
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [hot, setHot] = useState(lead.hot)
+  const [cnpj, setCnpj] = useState(maskCNPJ(lead.cnpj ?? ''))
 
   const isCompany = lead.personType === 'PJ'
 
@@ -42,6 +43,7 @@ export default function EditLeadForm({
       body: JSON.stringify({
         name: text('name'),
         company: isCompany ? text('company') : null,
+        cnpj: isCompany ? cnpj : null,
         role: text('role') || null,
         email: text('email'),
         phone: text('phone'),
@@ -89,7 +91,21 @@ export default function EditLeadForm({
         required
       />
 
-      {isCompany && <Field label="Cargo" name="role" defaultValue={lead.role ?? ''} />}
+      {isCompany && (
+        <>
+          <Field label="Cargo" name="role" defaultValue={lead.role ?? ''} />
+          <label className="flex flex-col gap-1.5">
+            <span className="text-[13px] font-semibold text-ink-2">CNPJ</span>
+            <input
+              inputMode="numeric"
+              value={cnpj}
+              onChange={(e) => setCnpj(maskCNPJ(e.target.value))}
+              placeholder="00.000.000/0000-00"
+              className={FIELD}
+            />
+          </label>
+        </>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <Field label="Telefone" name="phone" defaultValue={lead.phone} required />

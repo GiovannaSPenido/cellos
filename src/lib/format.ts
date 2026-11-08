@@ -90,3 +90,27 @@ export const PERSON_TYPE_LABELS = {
 export function plural(count: number, singular: string, pluralForm?: string): string {
   return `${count} ${count === 1 ? singular : (pluralForm ?? singular + 's')}`
 }
+
+/* ------------------------------------------------------------------ CNPJ --- */
+
+/** Strips the mask: the database stores fourteen digits and nothing else. */
+export function cnpjDigits(value: string | null | undefined): string {
+  return (value ?? '').replace(/\D/g, '')
+}
+
+/** `12.345.678/0001-90` for display; returns the input unchanged if incomplete. */
+export function formatCNPJ(value: string | null | undefined): string {
+  const d = cnpjDigits(value)
+  if (d.length !== 14) return value ?? ''
+  return `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}/${d.slice(8, 12)}-${d.slice(12)}`
+}
+
+/** Masks as the user types, so the field reads naturally while being filled. */
+export function maskCNPJ(value: string): string {
+  const d = cnpjDigits(value).slice(0, 14)
+  if (d.length <= 2) return d
+  if (d.length <= 5) return `${d.slice(0, 2)}.${d.slice(2)}`
+  if (d.length <= 8) return `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5)}`
+  if (d.length <= 12) return `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}/${d.slice(8)}`
+  return `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}/${d.slice(8, 12)}-${d.slice(12)}`
+}

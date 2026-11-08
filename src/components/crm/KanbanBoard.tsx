@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Flame, Calendar } from 'lucide-react'
+import { Flame, Calendar, GripHorizontal } from 'lucide-react'
 import type { LeadPrimitive } from '@/contexts/commercial/domain/entities/Lead'
 import type { LeadStatusValue } from '@/contexts/commercial/domain/value-objects/LeadStatus'
 import { LEAD_STAGES, formatBRL, formatShortDate, plural } from '@/lib/format'
@@ -19,6 +19,9 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimit
     setLeads(initialLeads)
   }, [initialLeads])
   const [dragging, setDragging] = useState<string | null>(null)
+  // O arraste só é liberado ao pegar pela alça: com o card inteiro arrastável,
+  // um movimento pequeno virava clique e abria o lead sem querer.
+  const [grabbed, setGrabbed] = useState<string | null>(null)
   const [over, setOver] = useState<LeadStatusValue | null>(null)
   const [openLead, setOpenLead] = useState<string | null>(null)
   const [openConverting, setOpenConverting] = useState(false)
@@ -114,21 +117,20 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimit
                 )}
               </header>
 
-              <div className="flex min-h-[80px] flex-col gap-2.5">
+              <div className="flex min-h-[380px] flex-col gap-2.5">
                 {column.map((lead) => (
                   <article
                     key={lead.id}
-                    draggable
+                    draggable={grabbed === lead.id}
                     onDragStart={() => setDragging(lead.id)}
                     onDragEnd={() => {
                       setDragging(null)
+                      setGrabbed(null)
                       setOver(null)
                     }}
-                    onClick={() => {
-                      setOpenConverting(false)
-                      setOpenLead(lead.id)
-                    }}
-                    className="cursor-pointer rounded-md border bg-surface p-3.5 shadow-[0_1px_2px_rgba(33,30,26,0.05)] transition hover:shadow-[0_4px_12px_rgba(33,30,26,0.08)]"
+                    className={`rounded-md border bg-surface pb-3.5 shadow-[0_1px_2px_rgba(33,30,26,0.05)] transition hover:shadow-[0_4px_12px_rgba(33,30,26,0.08)] ${
+                      dragging === lead.id ? 'opacity-50' : ''
+                    }`}
                     style={{
                       borderColor: lead.hot ? 'transparent' : 'var(--color-line)',
                       borderLeft: lead.hot
@@ -136,6 +138,23 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimit
                         : '1px solid var(--color-line)',
                     }}
                   >
+                    <div
+                      onMouseDown={() => setGrabbed(lead.id)}
+                      onMouseUp={() => setGrabbed(null)}
+                      title="Arraste por aqui para mudar de etapa"
+                      className="flex cursor-grab items-center justify-center gap-1 rounded-t-md border-b border-line py-2 text-muted-2 transition hover:bg-surface-2 active:cursor-grabbing"
+                    >
+                      <GripHorizontal size={16} aria-hidden />
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenConverting(false)
+                        setOpenLead(lead.id)
+                      }}
+                      className="w-full cursor-pointer px-3.5 pt-3 text-left"
+                    >
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <p className="truncate text-[14px] font-bold">
@@ -175,6 +194,7 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimit
                         </span>
                       )}
                     </div>
+                    </button>
                   </article>
                 ))}
 
