@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { X, Plus, Flame } from 'lucide-react'
+import { X, Plus, Flame, Handshake } from 'lucide-react'
 import type { LeadPrimitive } from '@/contexts/commercial/domain/entities/Lead'
 import type { InteractionPrimitive } from '@/contexts/commercial/domain/entities/Interaction'
 import type { InteractionTypeValue } from '@/contexts/commercial/domain/value-objects/InteractionType'
 import type { LeadStatusValue } from '@/contexts/commercial/domain/value-objects/LeadStatus'
 import { Avatar, Badge } from '@/components/ui'
+import ConvertLeadForm from './ConvertLeadForm'
 import {
   INTERACTION_LABELS,
   LEAD_STAGES,
@@ -26,16 +27,20 @@ export default function LeadDrawer({
   leadId,
   onClose,
   onChanged,
+  startConverting = false,
 }: {
   leadId: string
   onClose: () => void
   onChanged: () => void
+  /** Opens straight on the conversion form, for a card dropped on "Fechado". */
+  startConverting?: boolean
 }) {
   const [data, setData] = useState<History | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [description, setDescription] = useState('')
   const [type, setType] = useState<InteractionTypeValue>('CALL')
   const [busy, setBusy] = useState(false)
+  const [converting, setConverting] = useState(startConverting)
 
   useEffect(() => {
     let active = true
@@ -176,7 +181,18 @@ export default function LeadDrawer({
 
           {!lead && !error && <p className="text-[14px] text-muted">Carregando…</p>}
 
-          {lead && (
+          {lead && converting && (
+            <ConvertLeadForm
+              lead={lead}
+              onBack={() => setConverting(false)}
+              onConverted={() => {
+                onChanged()
+                onClose()
+              }}
+            />
+          )}
+
+          {lead && !converting && (
             <div className="flex flex-col gap-6">
               {/* dados */}
               <dl className="flex flex-col">
@@ -212,7 +228,13 @@ export default function LeadDrawer({
                         key={stage.id}
                         type="button"
                         disabled={busy}
-                        onClick={() => changeStage(stage.id)}
+                        onClick={() =>
+                          // Closing needs the contract details, so this stage
+                          // opens the conversion form instead of moving alone.
+                          stage.id === 'CONVERTED'
+                            ? setConverting(true)
+                            : changeStage(stage.id)
+                        }
                         aria-pressed={active}
                         className="rounded-full border-[1.5px] px-3 py-1.5 text-[12.5px] font-semibold transition disabled:opacity-60"
                         style={
@@ -226,6 +248,16 @@ export default function LeadDrawer({
                     )
                   })}
                 </div>
+
+                {lead.status !== 'CONVERTED' && lead.status !== 'LOST' && (
+                  <button
+                    type="button"
+                    onClick={() => setConverting(true)}
+                    className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-teal-50 px-4 py-2.5 text-[13.5px] font-semibold text-teal-600 transition hover:bg-teal-100"
+                  >
+                    <Handshake size={16} aria-hidden /> Converter em cliente
+                  </button>
+                )}
               </section>
 
               {/* registrar interação */}

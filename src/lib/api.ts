@@ -3,6 +3,7 @@ import NotFoundException from '@/shared/domain/exceptions/NotFoundException'
 import User from '@/contexts/commercial/domain/entities/User'
 import { buildContainer, type Container } from './container'
 import { createServerSupabaseClient } from './supabase/server'
+import { parseDateOnly } from './dates'
 
 export class ApiError extends Error {
   constructor(
@@ -84,9 +85,25 @@ export function required<T>(value: T | undefined | null, field: string): T {
   return value
 }
 
-/** Parses an ISO date, rejecting anything unparseable. */
+/**
+ * Parses a date from the request, rejecting anything unparseable.
+ *
+ * A bare `YYYY-MM-DD` — what a date input sends — goes through the local
+ * calendar rather than `new Date()`, which would read it as UTC midnight and
+ * store the previous day anywhere west of Greenwich.
+ */
 export function parseDate(value: unknown, field: string): Date {
-  const date = new Date(String(value))
+  const text = String(value).trim()
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+    const parsed = parseDateOnly(text)
+    if (!parsed) {
+      throw new ApiError(`O campo "${field}" não é uma data válida.`, 400)
+    }
+    return parsed
+  }
+
+  const date = new Date(text)
   if (Number.isNaN(date.getTime())) {
     throw new ApiError(`O campo "${field}" não é uma data válida.`, 400)
   }

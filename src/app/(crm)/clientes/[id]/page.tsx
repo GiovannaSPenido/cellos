@@ -80,7 +80,7 @@ export default async function ClienteDetalhePage({ params }: PageProps<'/cliente
                 </div>
                 <div className="text-right">
                   <p className="tabular font-mono text-[22px] font-extrabold">
-                    {formatBRL(client.monthlyFee.toPrimitive())}
+                    {formatBRL(client.monthlyFee.toPrimitive(), true)}
                   </p>
                   <p className="text-[12px] text-muted">por mês</p>
                 </div>

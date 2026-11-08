@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Flame, Calendar } from 'lucide-react'
 import type { LeadPrimitive } from '@/contexts/commercial/domain/entities/Lead'
@@ -12,9 +12,16 @@ import LeadDrawer from './LeadDrawer'
 export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimitive[] }) {
   const router = useRouter()
   const [leads, setLeads] = useState(initialLeads)
+
+  // useState only reads its argument on the first render, so a refresh that
+  // brings new server data would otherwise leave the board showing the old one.
+  useEffect(() => {
+    setLeads(initialLeads)
+  }, [initialLeads])
   const [dragging, setDragging] = useState<string | null>(null)
   const [over, setOver] = useState<LeadStatusValue | null>(null)
   const [openLead, setOpenLead] = useState<string | null>(null)
+  const [openConverting, setOpenConverting] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
 
   async function moveTo(leadId: string, status: LeadStatusValue) {
@@ -22,9 +29,10 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimit
     if (!lead || lead.status === status) return
 
     if (status === 'CONVERTED') {
-      setNotice(
-        'Para fechar um contrato, abra o lead e use "Converter em cliente" — é preciso informar plano, mensalidade e vigência.',
-      )
+      // Closing needs plan, fee and start date, so the card does not simply
+      // move: the lead opens on the form that collects them.
+      setOpenConverting(true)
+      setOpenLead(leadId)
       return
     }
 
@@ -116,7 +124,10 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimit
                       setDragging(null)
                       setOver(null)
                     }}
-                    onClick={() => setOpenLead(lead.id)}
+                    onClick={() => {
+                      setOpenConverting(false)
+                      setOpenLead(lead.id)
+                    }}
                     className="cursor-pointer rounded-md border bg-surface p-3.5 shadow-[0_1px_2px_rgba(33,30,26,0.05)] transition hover:shadow-[0_4px_12px_rgba(33,30,26,0.08)]"
                     style={{
                       borderColor: lead.hot ? 'transparent' : 'var(--color-line)',
@@ -181,7 +192,11 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: LeadPrimit
       {openLead && (
         <LeadDrawer
           leadId={openLead}
-          onClose={() => setOpenLead(null)}
+          startConverting={openConverting}
+          onClose={() => {
+            setOpenLead(null)
+            setOpenConverting(false)
+          }}
           onChanged={() => router.refresh()}
         />
       )}
