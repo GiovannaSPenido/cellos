@@ -18,6 +18,8 @@ import {
   DoorOpen,
   ArrowLeft,
   RotateCcw,
+  CircleCheck,
+  MessagesSquare,
   Handshake,
   type LucideIcon,
 } from 'lucide-react'
@@ -27,7 +29,7 @@ import type {
 } from '@/contexts/commercial/application/usecases/RecommendPlanUseCase'
 import { AGE_BRACKETS } from '@/contexts/commercial/domain/value-objects/AgeBracket'
 import { Badge, ProgressBar } from '@/components/ui'
-import { formatBRL } from '@/lib/format'
+import { maskCNPJ } from '@/lib/format'
 
 type Key = keyof Omit<QuizAnswers, 'lives'>
 
@@ -37,6 +39,9 @@ interface Step {
   hint: string
   options: { value: string; label: string; Icon: LucideIcon }[]
 }
+
+const FIELD =
+  'w-full rounded-sm border border-line-2 bg-surface px-3.5 py-3 text-[15px] outline-none transition focus:border-teal focus:ring-[3px] focus:ring-teal-50'
 
 /** The five questions of RF12, in order. */
 const STEPS: Step[] = [
@@ -89,12 +94,18 @@ const STEPS: Step[] = [
   },
 ]
 
+type Phase = 'questions' | 'result' | 'quote' | 'sent'
+
 export default function PlanQuiz() {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Partial<QuizAnswers>>({})
   const [result, setResult] = useState<RecommendationResult | null>(null)
+  const [phase, setPhase] = useState<Phase>('questions')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [cnpj, setCnpj] = useState('')
+
+  const isCompany = answers.audience === 'company'
 
   async function choose(key: Key, value: string) {
     const next = { ...answers, [key]: value }
@@ -121,17 +132,182 @@ export default function PlanQuiz() {
       return
     }
     setResult(payload)
+    setPhase('result')
+  }
+
+  /**
+   * RF06 — the quote request becomes a lead, carrying the quiz answers in the
+   * note so the broker opens the funnel already knowing the profile.
+   */
+  async function requestQuote(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setError(null)
+    setLoading(true)
+
+    const form = new FormData(event.currentTarget)
+    const text = (key: string) => String(form.get(key) ?? '').trim()
+
+    const response = await fetch('/api/contato', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        personType: isCompany ? 'PJ' : 'PF',
+        name: text('name'),
+        email: text('email'),
+        phone: text('phone'),
+        company: isCompany ? text('company') : null,
+        cnpj: isCompany ? cnpj : null,
+        planOfInterest: result?.best.name ?? null,
+        message: describeAnswers(answers),
+        origin: 'quiz',
+      }),
+    })
+    const payload = await response.json().catch(() => ({}))
+    setLoading(false)
+
+    if (!response.ok) {
+      setError(payload.error ?? 'Não foi possível enviar o pedido agora. Tente novamente.')
+      return
+    }
+    setPhase('sent')
   }
 
   function restart() {
     setStep(0)
     setAnswers({})
     setResult(null)
+    setCnpj('')
     setError(null)
+    setPhase('questions')
+  }
+
+  /* ------------------------------------------------------------- enviado -- */
+  if (phase === 'sent') {
+    return (
+      <div className="mx-auto max-w-[560px] rounded-lg border border-line bg-surface p-10 text-center">
+        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-teal-50 text-teal-600">
+          <CircleCheck size={34} aria-hidden />
+        </span>
+        <h1 className="mt-5 text-[26px] font-extrabold">Pedido de cotação enviado</h1>
+        <p className="mx-auto mt-3 max-w-[380px] text-[15px] leading-relaxed text-muted">
+          Um corretor da Cellos entra em contato em breve com os valores do plano recomendado
+          e das alternativas, sem nenhum custo.
+        </p>
+        <div className="mt-7 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/operadoras"
+            className="rounded-md bg-teal px-5 py-3 text-[14.5px] font-semibold text-white transition hover:bg-teal-600"
+          >
+            Ver as operadoras
+          </Link>
+          <button
+            type="button"
+            onClick={restart}
+            className="rounded-md border border-line-2 px-5 py-3 text-[14.5px] font-semibold text-ink-2 transition hover:bg-surface-2"
+          >
+            Refazer o teste
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  /* -------------------------------------------------- pedido de cotação -- */
+  if (phase === 'quote') {
+    return (
+      <div className="mx-auto max-w-[560px]">
+        <button
+          type="button"
+          onClick={() => setPhase('result')}
+          className="mb-6 inline-flex items-center gap-2 rounded-sm border border-line-2 px-3.5 py-2 text-[13.5px] font-semibold text-ink-2 transition hover:bg-surface-2"
+        >
+          <ArrowLeft size={15} aria-hidden /> Voltar para a recomendação
+        </button>
+
+        <form
+          onSubmit={requestQuote}
+          className="flex flex-col gap-5 rounded-lg border border-line bg-surface p-8"
+        >
+          <div>
+            <h1 className="text-[24px] font-extrabold">Cotação gratuita</h1>
+            <p className="mt-2 text-[14.5px] leading-relaxed text-muted">
+              Suas respostas já estão registradas. Diga só para onde enviamos os valores
+              {result ? ` do ${result.best.name}` : ''}.
+            </p>
+          </div>
+
+          <label className="flex flex-col gap-1.5">
+            <span className="text-[13px] font-semibold text-ink-2">Nome completo</span>
+            <input name="name" required placeholder="Seu nome" className={FIELD} />
+          </label>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="flex min-w-0 flex-col gap-1.5">
+              <span className="text-[13px] font-semibold text-ink-2">Telefone / WhatsApp</span>
+              <input name="phone" required placeholder="(31) 99999-0000" className={FIELD} />
+            </label>
+            <label className="flex min-w-0 flex-col gap-1.5">
+              <span className="text-[13px] font-semibold text-ink-2">E-mail</span>
+              <input
+                name="email"
+                type="email"
+                required
+                placeholder="voce@email.com"
+                className={FIELD}
+              />
+            </label>
+          </div>
+
+          {isCompany && (
+            <>
+              <label className="flex flex-col gap-1.5">
+                <span className="text-[13px] font-semibold text-ink-2">Empresa</span>
+                <input name="company" required placeholder="Nome da empresa" className={FIELD} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className="text-[13px] font-semibold text-ink-2">
+                  CNPJ <span className="font-normal text-muted">(opcional)</span>
+                </span>
+                <input
+                  name="cnpj"
+                  inputMode="numeric"
+                  value={cnpj}
+                  onChange={(e) => setCnpj(maskCNPJ(e.target.value))}
+                  placeholder="00.000.000/0000-00"
+                  className={FIELD}
+                />
+              </label>
+            </>
+          )}
+
+          {error && (
+            <p
+              role="alert"
+              className="rounded-sm bg-critical-50 px-4 py-3 text-[13.5px] text-critical"
+            >
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-teal px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-teal-600 disabled:opacity-60"
+          >
+            <Handshake size={18} aria-hidden />
+            {loading ? 'Enviando…' : 'Pedir minha cotação'}
+          </button>
+
+          <p className="text-center text-[12px] text-muted">
+            Seus dados são usados apenas para o atendimento Cellos.
+          </p>
+        </form>
+      </div>
+    )
   }
 
   /* ----------------------------------------------------------- resultado -- */
-  if (result) {
+  if (phase === 'result' && result) {
     const best = result.best
     return (
       <div className="mx-auto max-w-[880px]">
@@ -148,23 +324,12 @@ export default function PlanQuiz() {
         </div>
 
         <article className="overflow-hidden rounded-lg border-2 border-brand bg-surface shadow-[0_18px_40px_-12px_rgba(33,30,26,0.18)]">
-          <header className="flex flex-wrap items-center justify-between gap-5 bg-brand-700 px-8 py-7 text-white">
-            <div>
-              <p className="font-mono text-[11.5px] font-bold uppercase tracking-[0.06em] opacity-85">
-                Melhor escolha · {best.tier}
-              </p>
-              <h2 className="mt-1.5 text-[30px] font-extrabold">{best.name}</h2>
-              <p className="text-[13.5px] opacity-85">{best.carrier}</p>
-            </div>
-            <div className="text-right">
-              <p className="text-[12.5px] opacity-85">
-                estimativa {result.ageBracketLabel.toLowerCase()}
-              </p>
-              <p className="tabular text-[34px] font-extrabold tracking-tight">
-                {formatBRL(best.estimatedPrice)}
-                <span className="text-[15px] font-semibold opacity-85">/mês</span>
-              </p>
-            </div>
+          <header className="bg-brand-700 px-8 py-7 text-white">
+            <p className="font-mono text-[11.5px] font-bold uppercase tracking-[0.06em] opacity-85">
+              Melhor escolha · {best.tier}
+            </p>
+            <h2 className="mt-1.5 text-[30px] font-extrabold">{best.name}</h2>
+            <p className="text-[13.5px] opacity-85">{best.carrier}</p>
           </header>
 
           <div className="px-8 py-7">
@@ -182,18 +347,33 @@ export default function PlanQuiz() {
               </ul>
             )}
 
+            {/*
+              Sem preço na tela, por decisão do cliente na validação de 08/11: os
+              valores mudam com frequência e dependem da cidade e da operadora, e
+              uma tabela desatualizada cria expectativa que não se cumpre.
+            */}
+            <div className="mt-7 flex gap-3 rounded-md bg-surface-2 px-5 py-4">
+              <MessagesSquare size={19} aria-hidden className="mt-0.5 shrink-0 text-teal-600" />
+              <p className="text-[13.5px] leading-relaxed text-ink-2">
+                <b className="font-bold">O valor vem por um corretor, não por uma tabela.</b>{' '}
+                As mensalidades mudam com frequência e variam conforme a cidade e as condições
+                da operadora. Pedimos a cotação exata para o seu perfil, sem custo.
+              </p>
+            </div>
+
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link
-                href={`/contato?plano=${encodeURIComponent(best.name)}&origem=quiz`}
+              <button
+                type="button"
+                onClick={() => setPhase('quote')}
                 className="inline-flex items-center gap-2 rounded-md bg-teal px-6 py-4 text-[16px] font-semibold text-white transition hover:bg-teal-600"
               >
-                <Handshake size={18} aria-hidden /> Quero contratar
-              </Link>
+                <Handshake size={18} aria-hidden /> Quero cotação gratuita
+              </button>
               <Link
-                href="/simular"
+                href="/planos"
                 className="rounded-md border border-line-2 px-6 py-4 text-[16px] font-semibold text-ink-2 transition hover:bg-surface-2"
               >
-                Simular outras faixas
+                Comparar os planos
               </Link>
             </div>
           </div>
@@ -204,16 +384,16 @@ export default function PlanQuiz() {
             <h2 className="mb-4 text-[18px] font-bold">Também pode te interessar</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               {result.alternatives.map((plan) => (
-                <article key={plan.planId} className="rounded-lg border border-line bg-surface p-6">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <h3 className="text-[18px] font-bold">{plan.name}</h3>
-                    <span className="tabular shrink-0 font-mono text-[15px] font-bold">
-                      {formatBRL(plan.estimatedPrice)}
-                      <span className="text-[11px] font-medium text-muted">/mês</span>
-                    </span>
-                  </div>
+                <article
+                  key={plan.planId}
+                  className="min-w-0 rounded-lg border border-line bg-surface p-6"
+                >
+                  <h3 className="text-[18px] font-bold">{plan.name}</h3>
+                  <p className="mt-0.5 text-[12.5px] text-muted">{plan.carrier}</p>
                   {plan.summary && (
-                    <p className="mt-2 text-[13px] leading-relaxed text-muted">{plan.summary}</p>
+                    <p className="mt-2.5 text-[13px] leading-relaxed text-muted">
+                      {plan.summary}
+                    </p>
                   )}
                 </article>
               ))}
@@ -312,4 +492,25 @@ export default function PlanQuiz() {
       {loading && <p className="mt-6 text-[14px] text-muted">Montando sua recomendação…</p>}
     </div>
   )
+}
+
+/** Turns the quiz answers into the note that reaches the broker with the lead. */
+function describeAnswers(answers: Partial<QuizAnswers>): string {
+  const label = (key: Key) => {
+    const step = STEPS.find((s) => s.key === key)
+    return step?.options.find((o) => o.value === answers[key])?.label ?? null
+  }
+
+  const lines: [string, string | null][] = [
+    ['Para quem', label('audience')],
+    ['Faixa etária', label('ageBracket')],
+    ['Prioridade', label('priority')],
+    ['Abrangência', label('area')],
+    ['Acomodação', label('accommodation')],
+  ]
+
+  return [
+    'Respostas do Descubra seu plano:',
+    ...lines.filter(([, value]) => value).map(([key, value]) => `${key}: ${value}`),
+  ].join('\n')
 }

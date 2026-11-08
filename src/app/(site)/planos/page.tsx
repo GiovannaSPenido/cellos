@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { Wand2 } from 'lucide-react'
 import { loadCatalogue } from '@/lib/catalogue'
 import PlanCard from '@/components/site/PlanCard'
-import { formatBRL } from '@/lib/format'
 
 export const metadata = {
   title: 'Planos de saúde — Cellos',
@@ -36,8 +35,9 @@ export default async function PlanosPage() {
           Compare os planos e escolha com clareza
         </h1>
         <p className="mt-4 text-[17px] leading-relaxed text-ink-2">
-          Linhas pensadas para perfis diferentes. Os valores são <em>a partir de</em> — simule
-          pela sua faixa etária para o preço exato.
+          Linhas pensadas para perfis diferentes. O valor depende da faixa etária, da cidade e
+          das condições da operadora, então a cotação vem por um corretor — é gratuita e sai no
+          mesmo dia.
         </p>
       </header>
 
@@ -103,19 +103,6 @@ export default async function PlanosPage() {
                       ))}
                     </tr>
                   ))}
-                  <tr className="border-t border-line bg-surface-2">
-                    <th scope="row" className="px-5 py-4 text-left font-bold">
-                      Preço a partir de
-                    </th>
-                    {plans.map((plan) => (
-                      <td key={plan.id} className="px-5 py-4">
-                        <span className="tabular font-mono text-[16px] font-bold">
-                          {formatBRL(plan.basePrice)}
-                        </span>
-                        <span className="text-[12px] text-muted">/mês</span>
-                      </td>
-                    ))}
-                  </tr>
                 </tbody>
               </table>
             </div>

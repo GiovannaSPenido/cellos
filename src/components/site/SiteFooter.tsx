@@ -12,8 +12,9 @@ const COLUMNS: { title: string; items: FooterItem[] }[] = [
     title: 'Planos',
     items: [
       { label: 'Ver todos os planos', href: '/planos' },
-      { label: 'Simular preço', href: '/simular' },
+      { label: 'Operadoras parceiras', href: '/operadoras' },
       { label: 'Descubra seu plano', href: '/descubra' },
+      { label: 'Sobre a Cellos', href: '/sobre' },
     ],
   },
   {
@@ -69,7 +70,7 @@ export default function SiteFooter() {
             © 2026 Cellos Comércio e Serviços em Planos de Saúde LTDA. · CNPJ
             10.569.183/0001-14
           </span>
-          <span>Valores simulados não constituem proposta contratual.</span>
+          <span>As condições de cada plano são as da operadora contratada.</span>
         </div>
       </div>
     </footer>

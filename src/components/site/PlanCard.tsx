@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { CircleCheck } from 'lucide-react'
 import type { HealthPlanPrimitive } from '@/contexts/commercial/domain/entities/HealthPlan'
 import { Badge } from '@/components/ui'
-import { formatBRL } from '@/lib/format'
 
 export default function PlanCard({
   plan,
@@ -33,16 +32,6 @@ export default function PlanCard({
         <p className="mt-0.5 text-[12.5px] text-muted">{plan.carrier}</p>
       </header>
 
-      <div>
-        <p className="text-[12.5px] text-muted">a partir de</p>
-        <p className="flex items-baseline gap-1">
-          <span className="tabular text-[30px] font-extrabold tracking-tight">
-            {formatBRL(plan.basePrice)}
-          </span>
-          <span className="text-[14px] font-semibold text-muted">/mês</span>
-        </p>
-      </div>
-
       {plan.summary && (
         <p className="text-[13.5px] leading-relaxed text-ink-2">{plan.summary}</p>
       )}
@@ -68,14 +57,14 @@ export default function PlanCard({
       )}
 
       <Link
-        href="/simular"
+        href={`/contato?plano=${encodeURIComponent(plan.name)}`}
         className={`mt-auto rounded-sm px-4 py-2.5 text-center text-[14px] font-semibold transition ${
           plan.featured
             ? 'bg-teal text-white hover:bg-teal-600'
             : 'border border-line-2 text-ink-2 hover:bg-surface-2'
         }`}
       >
-        Simular preço
+        Pedir cotação
       </Link>
     </article>
   )

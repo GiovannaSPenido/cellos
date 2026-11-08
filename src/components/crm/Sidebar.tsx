@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutGrid, Filter, Users, Globe, LogOut } from 'lucide-react'
+import { LayoutGrid, Filter, Users, Calculator, Globe, LogOut } from 'lucide-react'
 import { Avatar } from '@/components/ui'
 import { createClient } from '@/lib/supabase/client'
 import Logo from '@/components/Logo'
@@ -11,6 +11,7 @@ const NAV = [
   { href: '/dashboard', label: 'Dashboard', Icon: LayoutGrid },
   { href: '/prospeccao', label: 'Prospecção', Icon: Filter },
   { href: '/clientes', label: 'Clientes', Icon: Users },
+  { href: '/cotacao', label: 'Cotação', Icon: Calculator },
 ]
 
 export default function Sidebar({ name, role }: { name: string; role: string }) {

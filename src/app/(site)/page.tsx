@@ -69,10 +69,10 @@ export default async function HomePage() {
                 <Wand2 size={18} aria-hidden /> Descubra seu plano
               </Link>
               <Link
-                href="/simular"
+                href="/operadoras"
                 className="inline-flex items-center rounded-md border border-line-2 px-6 py-4 text-[16px] font-semibold text-ink-2 transition hover:bg-surface"
               >
-                Simular preço
+                Ver as operadoras
               </Link>
             </div>
 

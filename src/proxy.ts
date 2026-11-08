@@ -3,7 +3,7 @@ import { createServerClient } from '@supabase/ssr'
 import { supabaseEnv } from '@/lib/supabase/env'
 
 /** Paths that require a signed-in user (RNF01). */
-const PROTECTED_PREFIXES = ['/dashboard', '/prospeccao', '/clientes', '/agenda']
+const PROTECTED_PREFIXES = ['/dashboard', '/prospeccao', '/clientes', '/cotacao', '/agenda']
 
 const LOGIN_PATH = '/login'
 

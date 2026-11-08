@@ -8,8 +8,9 @@ import Logo from '@/components/Logo'
 
 const LINKS = [
   { href: '/planos', label: 'Planos' },
-  { href: '/simular', label: 'Simular preço' },
+  { href: '/operadoras', label: 'Operadoras' },
   { href: '/descubra', label: 'Descubra seu plano' },
+  { href: '/sobre', label: 'Sobre' },
   { href: '/contato', label: 'Contato' },
 ]
 
