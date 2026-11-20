@@ -66,7 +66,9 @@ export const CARRIERS: Operadora[] = [
 
 /** Números institucionais exibidos na página Sobre. */
 export const COMPANY_STATS: { value: string; label: string; pending?: boolean }[] = [
-  { value: '20+', label: 'anos de experiência no segmento', pending: true },
+  // o próprio representante afirmou mais de vinte anos na reunião de 8 de
+  // novembro; é declaração dele, não estimativa nossa
+  { value: '20+', label: 'anos de experiência no segmento' },
   { value: '+10 mil', label: 'clientes atendidos' },
   { value: 'PF e PJ', label: 'pessoas físicas e empresas' },
 ]
