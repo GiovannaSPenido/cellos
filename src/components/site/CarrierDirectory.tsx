@@ -7,13 +7,22 @@ import { Badge } from '@/components/ui'
 
 type Filter = 'all' | 'MEDICAL' | 'DENTAL' | 'INDIVIDUAL' | 'CORPORATE'
 
-const FILTERS: { value: Filter; label: string }[] = [
+const TODOS: { value: Filter; label: string }[] = [
   { value: 'all', label: 'Todas' },
   { value: 'MEDICAL', label: 'Planos médicos' },
   { value: 'DENTAL', label: 'Odontológicos' },
   { value: 'INDIVIDUAL', label: 'Pessoa física' },
   { value: 'CORPORATE', label: 'Empresarial' },
 ]
+
+/**
+ * Só oferece um filtro que tenha resultado. A corretora hoje representa apenas
+ * planos médicos, então o filtro de odontológicos não aparece — um botão que
+ * devolve lista vazia faz o visitante pensar que o site quebrou.
+ */
+function filtrosUteis(carriers: Operadora[]) {
+  return TODOS.filter((f) => carriers.some((c) => matches(c, f.value)))
+}
 
 function matches(carrier: Operadora, filter: Filter): boolean {
   switch (filter) {
@@ -31,12 +40,13 @@ function matches(carrier: Operadora, filter: Filter): boolean {
 
 export default function CarrierDirectory({ carriers }: { carriers: Operadora[] }) {
   const [filter, setFilter] = useState<Filter>('all')
+  const filtros = filtrosUteis(carriers)
   const visible = carriers.filter((carrier) => matches(carrier, filter))
 
   return (
     <>
       <div role="group" aria-label="Filtrar operadoras" className="mt-9 flex flex-wrap gap-2.5">
-        {FILTERS.map(({ value, label }) => (
+        {filtros.map(({ value, label }) => (
           <button
             key={value}
             type="button"
