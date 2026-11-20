@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
-import { PhoneCall, MessageCircle, Mail } from 'lucide-react'
+import { MessageCircle, Mail } from 'lucide-react'
 import ContactForm from '@/components/site/ContactForm'
+import { CONTACT_CHANNELS } from '@/lib/corretora'
 
 export const metadata = {
   title: 'Contato — Cellos',
@@ -8,11 +9,11 @@ export const metadata = {
     'Fale com um corretor da Cellos por telefone, WhatsApp ou e-mail, ou solicite um contato pelo formulário.',
 }
 
-const CHANNELS = [
-  { Icon: PhoneCall, label: 'Telefone', value: '(31) 3000-0000', hint: 'Seg–Sex, 8h às 18h' },
-  { Icon: MessageCircle, label: 'WhatsApp', value: '(31) 99999-0000', hint: 'Resposta em minutos' },
-  { Icon: Mail, label: 'E-mail', value: 'contato@cellos.com.br', hint: 'Retorno em até 1 dia útil' },
-]
+// a corretora não possui telefone fixo, então o site não anuncia nenhum
+const CHANNELS = CONTACT_CHANNELS.map((c) => ({
+  ...c,
+  Icon: c.kind === 'whatsapp' ? MessageCircle : Mail,
+}))
 
 export default function ContatoPage() {
   return (

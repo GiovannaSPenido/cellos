@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Logo from '@/components/Logo'
+import { OPENING_HOURS } from '@/lib/corretora'
 
 interface FooterItem {
   label: string
@@ -20,9 +21,9 @@ const COLUMNS: { title: string; items: FooterItem[] }[] = [
   {
     title: 'Contato',
     items: [
-      { label: '(31) 3000-0000' },
-      { label: 'contato@cellos.com.br' },
-      { label: 'Seg–Sex, 8h às 18h' },
+      { label: 'WhatsApp (31) 98448-3216' },
+      { label: 'cellos.planos@gmail.com' },
+      { label: OPENING_HOURS },
     ],
   },
 ]

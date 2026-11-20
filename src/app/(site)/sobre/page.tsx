@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Handshake, HeartHandshake, ShieldCheck } from 'lucide-react'
-import { COMPANY_STATS, REFERENCES } from '@/lib/placeholder'
+import { COMPANY_STATS, COMPANY_TAGLINE, REFERENCES } from '@/lib/corretora'
 
 export const metadata = {
   title: 'Sobre a Cellos — corretora de planos de saúde',
@@ -34,7 +34,7 @@ export default function SobrePage() {
           Sobre a Cellos
         </p>
         <h1 className="mt-4 text-[clamp(30px,5vw,42px)] font-extrabold leading-tight">
-          Mais de duas décadas ao lado de quem precisa de plano
+          {COMPANY_TAGLINE}
         </h1>
         <p className="mt-5 text-[17px] leading-relaxed text-ink-2">
           A Cellos Comércio e Serviços em Planos de Saúde intermedeia planos para pessoas

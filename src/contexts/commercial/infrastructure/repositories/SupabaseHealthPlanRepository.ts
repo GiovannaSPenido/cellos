@@ -3,6 +3,7 @@ import HealthPlan from '../../domain/entities/HealthPlan'
 import Money from '@/shared/domain/value-objects/Money'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { parseTimestamp } from '@/lib/dates'
+import type { AgeBracketCode } from '../../domain/value-objects/AgeBracket'
 
 export interface HealthPlanRow {
   id: string
@@ -26,6 +27,8 @@ export interface HealthPlanRow {
   nao_inclui: string[]
   ativo: boolean
   criado_em: string
+  /** Vem do join com `precos_faixa`; ausente nas consultas que não o pedem. */
+  precos_faixa?: { faixa: string; valor: string }[]
 }
 
 const NO_ROWS = 'PGRST116'
@@ -38,7 +41,7 @@ export class SupabaseHealthPlanRepository implements HealthPlanRepository {
   }
 
   async findById(id: string): Promise<HealthPlan | null> {
-    const { data, error } = await this.table().select('*').eq('id', id).single()
+    const { data, error } = await this.table().select('*, precos_faixa(faixa, valor)').eq('id', id).single()
 
     if (error && error.code !== NO_ROWS) {
       throw new Error(`Failed to find health plan: ${error.message}`)
@@ -47,7 +50,7 @@ export class SupabaseHealthPlanRepository implements HealthPlanRepository {
   }
 
   async findByCode(code: string): Promise<HealthPlan | null> {
-    const { data, error } = await this.table().select('*').eq('codigo', code).single()
+    const { data, error } = await this.table().select('*, precos_faixa(faixa, valor)').eq('codigo', code).single()
 
     if (error && error.code !== NO_ROWS) {
       throw new Error(`Failed to find health plan by code: ${error.message}`)
@@ -57,7 +60,7 @@ export class SupabaseHealthPlanRepository implements HealthPlanRepository {
 
   async findAllActive(): Promise<HealthPlan[]> {
     const { data, error } = await this.table()
-      .select('*')
+      .select('*, precos_faixa(faixa, valor)')
       .eq('ativo', true)
       .order('preco_base', { ascending: true })
 
@@ -68,7 +71,7 @@ export class SupabaseHealthPlanRepository implements HealthPlanRepository {
 
   async findAll(): Promise<HealthPlan[]> {
     const { data, error } = await this.table()
-      .select('*')
+      .select('*, precos_faixa(faixa, valor)')
       .order('preco_base', { ascending: true })
 
     if (error) throw new Error(`Failed to list health plans: ${error.message}`)
@@ -144,6 +147,12 @@ export class SupabaseHealthPlanRepository implements HealthPlanRepository {
       network: row.rede_credenciada,
       waitingPeriod: row.carencia,
       basePrice: Money.fromReais(row.preco_base),
+      pricesByBracket: Object.fromEntries(
+        (row.precos_faixa ?? []).map((p) => [
+          p.faixa as AgeBracketCode,
+          Money.fromReais(p.valor).toPrimitive(),
+        ]),
+      ),
       summary: row.resumo,
       featured: row.destaque,
       includes: row.inclui ?? [],

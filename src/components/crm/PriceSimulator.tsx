@@ -15,7 +15,7 @@ export default function PriceSimulator({
   ageBrackets: { code: AgeBracketCode; label: string }[]
 }) {
   const [personType, setPersonType] = useState<PersonTypeValue>('PF')
-  const [ageBracket, setAgeBracket] = useState<AgeBracketCode>('19-28')
+  const [ageBracket, setAgeBracket] = useState<AgeBracketCode>('19-23')
   const [lives, setLives] = useState(5)
   const [result, setResult] = useState<SimulationResult | null>(null)
   const [error, setError] = useState<string | null>(null)

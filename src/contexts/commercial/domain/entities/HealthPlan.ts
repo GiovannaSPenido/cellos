@@ -1,7 +1,7 @@
 import Entity, { EntityPrimitive } from '@/shared/domain/base/Entity'
 import DomainException from '@/shared/domain/exceptions/DomainException'
 import Money from '@/shared/domain/value-objects/Money'
-import AgeBracket from '../value-objects/AgeBracket'
+import AgeBracket, { AgeBracketCode } from '../value-objects/AgeBracket'
 import PersonType from '../value-objects/PersonType'
 
 /** Volume discount applied to company contracts. */
@@ -34,6 +34,8 @@ export interface HealthPlanProps {
   network?: string | null
   waitingPeriod?: string | null
   basePrice: Money | number | string
+  /** Mensalidade por vida em cada faixa da ANS, em centavos. */
+  pricesByBracket?: Partial<Record<AgeBracketCode, number>>
   summary?: string | null
   featured?: boolean
   includes?: string[]
@@ -57,6 +59,7 @@ export interface HealthPlanPrimitive extends EntityPrimitive {
   network: string | null
   waitingPeriod: string | null
   basePrice: number
+  pricesByBracket: Partial<Record<AgeBracketCode, number>>
   summary: string | null
   featured: boolean
   includes: string[]
@@ -79,6 +82,7 @@ export class HealthPlan extends Entity {
   network: string | null
   waitingPeriod: string | null
   basePrice: Money
+  pricesByBracket: Partial<Record<AgeBracketCode, number>>
   summary: string | null
   featured: boolean
   includes: string[]
@@ -103,6 +107,7 @@ export class HealthPlan extends Entity {
     this.waitingPeriod = props.waitingPeriod ?? null
     this.basePrice =
       props.basePrice instanceof Money ? props.basePrice : Money.fromReais(props.basePrice)
+    this.pricesByBracket = props.pricesByBracket ?? {}
     this.summary = props.summary ?? null
     this.featured = props.featured ?? false
     this.includes = props.includes ?? []
@@ -113,9 +118,24 @@ export class HealthPlan extends Entity {
   }
 
   // ----------------------------------------------------------------- pricing
-  /** RF11 — monthly price for one life in the given age band. */
+  /**
+   * RF11 — mensalidade de uma vida na faixa informada.
+   *
+   * O valor da tabela da operadora tem precedência: é o preço real praticado.
+   * O produto entre preço base e fator da faixa só entra como reserva, para um
+   * plano cujo preço por faixa ainda não tenha sido cadastrado.
+   */
   pricePerLife(bracket: AgeBracket): Money {
+    const tabelado = this.pricesByBracket[bracket.code]
+    if (tabelado !== undefined) {
+      return Money.fromCents(tabelado)
+    }
     return this.basePrice.times(bracket.factor)
+  }
+
+  /** Indica se o preço veio da tabela da operadora, e não de estimativa. */
+  hasTabledPrice(bracket: AgeBracket): boolean {
+    return this.pricesByBracket[bracket.code] !== undefined
   }
 
   /**
@@ -129,7 +149,7 @@ export class HealthPlan extends Entity {
     if (personType.isIndividual()) {
       return this.pricePerLife(bracket)
     }
-    return this.basePrice.times(bracket.factor * lives * COMPANY_VOLUME_FACTOR)
+    return this.pricePerLife(bracket).times(lives * COMPANY_VOLUME_FACTOR)
   }
 
   // ------------------------------------------------- traits used for ranking
@@ -193,6 +213,7 @@ export class HealthPlan extends Entity {
       network: this.network,
       waitingPeriod: this.waitingPeriod,
       basePrice: this.basePrice.toPrimitive(),
+      pricesByBracket: { ...this.pricesByBracket },
       summary: this.summary,
       featured: this.featured,
       includes: [...this.includes],

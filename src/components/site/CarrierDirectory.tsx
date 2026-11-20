@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Stethoscope, Smile } from 'lucide-react'
-import type { CarrierPlaceholder } from '@/lib/placeholder'
+import type { Operadora } from '@/lib/corretora'
 import { Badge } from '@/components/ui'
 
 type Filter = 'all' | 'MEDICAL' | 'DENTAL' | 'INDIVIDUAL' | 'CORPORATE'
@@ -15,7 +15,7 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: 'CORPORATE', label: 'Empresarial' },
 ]
 
-function matches(carrier: CarrierPlaceholder, filter: Filter): boolean {
+function matches(carrier: Operadora, filter: Filter): boolean {
   switch (filter) {
     case 'all':
       return true
@@ -29,7 +29,7 @@ function matches(carrier: CarrierPlaceholder, filter: Filter): boolean {
   }
 }
 
-export default function CarrierDirectory({ carriers }: { carriers: CarrierPlaceholder[] }) {
+export default function CarrierDirectory({ carriers }: { carriers: Operadora[] }) {
   const [filter, setFilter] = useState<Filter>('all')
   const visible = carriers.filter((carrier) => matches(carrier, filter))
 

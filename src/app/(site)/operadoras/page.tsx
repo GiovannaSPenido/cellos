@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Wand2 } from 'lucide-react'
-import { CARRIERS } from '@/lib/placeholder'
+import { CARRIERS } from '@/lib/corretora'
 import CarrierDirectory from '@/components/site/CarrierDirectory'
 
 export const metadata = {
